@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run build:data && node ./scripts/prepare_public.mjs",
+  "framework": null,
+  "cleanUrls": true
+}

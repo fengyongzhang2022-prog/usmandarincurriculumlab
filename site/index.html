@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACTFL 中文教学备课平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="brand-token">文</div>
+        <div>
+          <p class="eyebrow">Teacher Studio</p>
+          <h1>ACTFL 中文教学备课平台</h1>
+        </div>
+      </div>
+      <div class="topbar-meta">
+        <div class="meta-pill">AP Chinese</div>
+        <div class="meta-pill">IB Chinese</div>
+        <div class="meta-pill">ACTFL OPI</div>
+        <div class="meta-pill">College Chinese</div>
+      </div>
+    </header>
+
+    <section class="hero-panel">
+      <div class="hero-copy">
+        <p class="eyebrow">面向美国一线中文教师</p>
+        <h2>把 ACTFL 词表、课堂语料、教研建议和 AI 生成备课支持放进同一个工作台</h2>
+        <p>
+          先选等级、主题、子主题、话题，再查看不同等级的词汇梯度；右侧可一键生成更多例句、教学配图与“三专家圆桌”建议，
+          适合备 AP/IB 中文、ACTFL OPI、大学中文课程。
+        </p>
+      </div>
+      <div class="hero-stats" id="heroStats"></div>
+    </section>
+
+    <section class="filter-panel">
+      <label>
+        <span>等级</span>
+        <select id="levelFilter"></select>
+      </label>
+      <label>
+        <span>主题</span>
+        <select id="themeFilter"></select>
+      </label>
+      <label>
+        <span>子主题</span>
+        <select id="subthemeFilter"></select>
+      </label>
+      <label>
+        <span>话题</span>
+        <select id="topicFilter"></select>
+      </label>
+      <label>
+        <span>检索</span>
+        <input id="searchInput" type="search" placeholder="搜 can-do、词汇、样例、教学场景">
+      </label>
+    </section>
+
+    <section class="workspace">
+      <aside class="results-column">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Result Explorer</p>
+            <h3>材料浏览</h3>
+          </div>
+          <div id="resultMeta" class="result-meta"></div>
+        </div>
+        <div id="activePath" class="active-path"></div>
+        <div id="resultsList" class="results-list"></div>
+      </aside>
+
+      <main class="detail-column">
+        <section class="detail-card feature-card">
+          <div class="feature-copy">
+            <p class="eyebrow">Selected Entry</p>
+            <h3 id="detailTitle">请选择一个条目</h3>
+            <p id="detailPath" class="detail-path"></p>
+            <div class="badge-row">
+              <span id="detailLevel" class="badge badge-level"></span>
+              <span id="detailMode" class="badge badge-mode"></span>
+            </div>
+          </div>
+          <div class="feature-media">
+            <img id="topicImage" alt="教学配图">
+          </div>
+        </section>
+
+        <section class="detail-grid">
+          <article class="detail-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Core Vocabulary</p>
+                <h3>核心词汇</h3>
+              </div>
+            </div>
+            <div id="coreWords" class="rich-text"></div>
+          </article>
+
+          <article class="detail-card">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Related Vocabulary</p>
+                <h3>相关词汇</h3>
+              </div>
+            </div>
+            <div id="relatedWords" class="rich-text"></div>
+          </article>
+        </section>
+
+        <section class="detail-card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Corpus</p>
+              <h3>原始样例语料</h3>
+            </div>
+          </div>
+          <div id="sampleText" class="sample-block"></div>
+        </section>
+
+        <section class="detail-card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Cross-Level View</p>
+              <h3>同话题跨等级对比</h3>
+            </div>
+          </div>
+          <div id="comparisonList" class="comparison-list"></div>
+        </section>
+
+        <section class="detail-card studio-card">
+          <div class="studio-head">
+            <div>
+              <p class="eyebrow">AI Lesson Lab</p>
+              <h3>扩展语料与备课支持</h3>
+            </div>
+            <button id="generateBtn" class="primary-button" type="button">生成更多例句与专家建议</button>
+          </div>
+          <p class="studio-note" id="studioNote">可连接 OpenAI API 生成更多样例语料、配图与教师视角建议；未配置 API key 时会自动使用本地演示模式。</p>
+
+          <div class="studio-grid">
+            <article class="studio-panel">
+              <h4>扩展示例语料</h4>
+              <div id="generatedExamples" class="generated-list empty-copy">选择条目后点击按钮生成。</div>
+            </article>
+
+            <article class="studio-panel">
+              <h4>微型任务链</h4>
+              <div id="generatedActivity" class="generated-list empty-copy">这里会生成导入、输入、输出和分层建议。</div>
+            </article>
+          </div>
+        </section>
+
+        <section class="detail-card debate-card">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Roundtable</p>
+              <h3>三专家圆桌</h3>
+            </div>
+          </div>
+          <div id="expertDebate" class="debate-grid">
+            <div class="empty-copy">生成后会在这里看到 AP/IB、OPI、大学中文三位专家的不同观点。</div>
+          </div>
+        </section>
+      </main>
+    </section>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

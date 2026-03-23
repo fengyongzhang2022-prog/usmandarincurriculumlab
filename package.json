@@ -1,0 +1,15 @@
+{
+  "name": "actfl-chinese-teaching-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:data": "python ./scripts/build_vocabulary_dataset.py",
+    "build:web": "npm run build:data && node ./scripts/prepare_public.mjs",
+    "start": "node ./server/server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "openai": "^6.6.0"
+  }
+}
