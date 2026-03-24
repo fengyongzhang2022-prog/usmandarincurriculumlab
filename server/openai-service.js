@@ -85,20 +85,29 @@ export async function generateWordMaterials({ word, level = "" }) {
   }
 
   const prompt = [
-    "You are a Chinese teaching preparation assistant for U.S. K-16 teachers.",
-    "Return strict JSON only.",
-    "Task: build a teacher-and-student-ready handout for one target word.",
-    "Write all output in Simplified Chinese.",
-    "Avoid theory, platform jargon, and vague comments.",
-    "Output must be directly usable in class, not just planning notes.",
-    "Explain meaning in easier Chinese whenever possible.",
-    "Include teacher explanation, synonyms, antonyms if appropriate, word-family clues, collocations, example sentences, and printable drill exercises.",
-    `Target word: ${word}`,
-    `Target ACTFL level (if provided): ${level || "未指定"}`,
-    `Dictionary matches: ${JSON.stringify(matches)}`,
-    `Level function-word hints: ${JSON.stringify(levelHints)}`,
-    `Grammar hints: ${JSON.stringify(grammarHints)}`,
-    'JSON schema: {"overview":"","documentTitle":"","sections":[{"title":"","items":["",""]}]}',
+    "你是应用语言学与国际中文教育专家，要为美国一线中文教师生成可直接使用的词汇讲义。",
+    "只输出严格 JSON。",
+    "不要写空泛原则，不要写“建议先”“可以考虑”“适合放在课堂中”等空话。",
+    "讲义必须像教师能直接发学生、或稍作修改后直接上课的材料。",
+    "如果 ACTFL 词表已收录该词，必须优先依据 ACTFL 匹配信息组织内容；不要随意改等级。",
+    "如果 ACTFL 没有精确收录，可以做谨慎推测，但必须明确写“ACTFL 未精确收录”。",
+    "解释词义时尽量用更低一级或同级的简单词语，不要用更难的抽象定义。",
+    "例句必须自然、短、可上课；练习必须是真能发给学生做的题，不要写教学原则。",
+    "必须按下面结构输出，标题固定，不要多加别的节。",
+    `目标词：${word}`,
+    `教师指定等级（可为空）：${level || "未指定"}`,
+    `ACTFL 匹配结果：${JSON.stringify(matches)}`,
+    `同等级功能词参考：${JSON.stringify(levelHints)}`,
+    `相关语法参考：${JSON.stringify(grammarHints)}`,
+    "输出要求：",
+    "1. 《一、基础档案》只写词性、ACTFL等级、其他等级（如有）、一句使用场景。",
+    "2. 《二、核心释义与词汇网络》必须包含：极简释义、近义词、反义词、相似词族。若没有可靠项，就明确写“暂无可靠……”。",
+    "3. 《三、构词法剖析》必须分析这个词内部结构；如果是单纯词，也要说清楚“不可再拆出有教学价值的语素”。",
+    "4. 《四、核心搭配与实用例句》必须给出 3 组常用搭配，每组 2 个例句。格式写完整，不要只列词。",
+    "5. 《五、5级梯度操练》必须给 5 级练习：替换、选择、连词成句、情境完成、自由表达。每级至少 2 题，能直接发学生。",
+    "6. 《六、课堂资产包》必须给板书要点、最小讲解脚本、课堂提醒。每项都要具体。",
+    "7. 不要出现‘平台’‘模块’‘AI’‘任务链’等词。",
+    'JSON schema: {"documentTitle":"","overview":"","sections":[{"title":"一、基础档案","items":["",""]},{"title":"二、核心释义与词汇网络","items":["",""]},{"title":"三、构词法剖析","items":[""]},{"title":"四、核心搭配与实用例句","items":["",""]},{"title":"五、5级梯度操练","items":["",""]},{"title":"六、课堂资产包","items":["",""]}]}',
   ].join("\n");
 
   const parsed = await requestJson(prompt);
@@ -122,17 +131,22 @@ export async function generateSynonymMaterials({ terms, level = "" }) {
   }));
 
   const prompt = [
-    "You are a Chinese teaching preparation assistant for U.S. K-16 teachers.",
-    "Return strict JSON only.",
-    "Task: create a printable near-synonym comparison handout.",
-    "Write all output in Simplified Chinese.",
-    "Focus on meaning difference, collocation, register, common misuse, and classroom practice.",
-    "The result must be useful for teachers to teach from and for students to read directly.",
-    "Include concrete sentence comparisons and actual drill exercises.",
-    `Terms: ${JSON.stringify(parsedTerms)}`,
-    `Target ACTFL level (if provided): ${level || "未指定"}`,
-    `Vocabulary hints: ${JSON.stringify(vocabHints)}`,
-    'JSON schema: {"overview":"","documentTitle":"","matrix":{"headers":["","",""],"rows":[["","",""]]},"sections":[{"title":"","items":["",""]}]}',
+    "你是国际中文教育中的词汇辨析专家，要生成一份老师可直接使用、学生也能看懂的近义词辨析讲义。",
+    "只输出严格 JSON。",
+    "不要写空泛原则，不要只说‘更书面’‘更口语’就结束；要给真正能上课的辨析内容。",
+    "讲义必须让老师拿来就能讲，也能直接截取给学生做练习。",
+    `目标词组：${JSON.stringify(parsedTerms)}`,
+    `教师指定等级（可为空）：${level || "未指定"}`,
+    `ACTFL 匹配结果：${JSON.stringify(vocabHints)}`,
+    "输出要求：",
+    "1. 先给一个对比总览表，列出：词语、ACTFL等级、核心意思、语体色彩、常见搭配、易混点。",
+    "2. 《基础档案与极简释义》要分别解释每个词，解释尽量用简单中文。",
+    "3. 《核心差异对比》必须真正说明：语义差别、语体差别、搭配差别、不能互换的场景。",
+    "4. 《典型句子对比》必须给成对句子，让老师一眼能拿去讲。",
+    "5. 《可直接发给学生的辨析练习》必须给真题，不要给原则。至少包括：选词填空、改错、情境判断、自造句。",
+    "6. 《教学提醒》只保留最关键的 2 到 3 条，不要空泛。",
+    "7. 内容要短而实，不要写成长篇教研报告。",
+    'JSON schema: {"documentTitle":"","overview":"","matrix":{"headers":["词汇","ACTFL等级","核心意思","语体色彩","常见搭配","易混点"],"rows":[["","","","","",""]]},"sections":[{"title":"一、基础档案与极简释义","items":["",""]},{"title":"二、核心差异对比","items":["",""]},{"title":"三、典型句子对比","items":["",""]},{"title":"四、可直接发给学生的辨析练习","items":["",""]},{"title":"五、教学提醒","items":["",""]}]}',
   ].join("\n");
 
   const parsed = await requestJson(prompt);
@@ -149,20 +163,26 @@ export async function generateCanDoMaterials({ canDo, level = "", mode = "" }) {
   }
 
   const prompt = [
-    "You are a Chinese teaching preparation assistant for U.S. K-16 teachers.",
-    "Return strict JSON only.",
-    "Task: convert one can-do statement into a practical classroom handout for teachers.",
-    "Write all output in Simplified Chinese.",
-    "Output should be practical for AP Chinese, IB Chinese, ACTFL OPI, or university Chinese teaching.",
-    "Do not explain ACTFL theory. Produce usable prompts, discussion questions, corpus suggestions, and speaking or writing tasks.",
-    "Avoid generic task chains. Give concrete, discussion-worthy and assessment-usable material.",
-    `Can-do: ${canDo}`,
-    `Target ACTFL level (if provided): ${level || "未指定"}`,
-    `Mode (if provided): ${mode || "未指定"}`,
-    `Closest outline entry: ${JSON.stringify(focusEntry || {})}`,
-    `Level function-word hints: ${JSON.stringify(levelHints)}`,
-    `Grammar hints: ${JSON.stringify(grammarHints)}`,
-    'JSON schema: {"overview":"","documentTitle":"","sections":[{"title":"","items":["",""]}]}',
+    "你是 ACTFL 中文教学设计专家，要把一条 can-do 转成老师真的能用的课堂讲义。",
+    "只输出严格 JSON。",
+    "不要解释理论，不要写泛泛的‘任务链’‘先输入后输出’之类空话。",
+    "先分析这条 can-do 到底要求学生能听懂、读懂、说出、写出什么，再围绕这个能力点生成材料。",
+    "如果是低级别 can-do，不要硬拔高到 AP/IB/OPI 大讨论；要保持真实、可落地。",
+    "如果是中高级 can-do，可以增加讨论题、观点题、语料建议和评测题。",
+    `Can-do 原文：${canDo}`,
+    `目标等级：${level || "未指定"}`,
+    `目标模态：${mode || "未指定"}`,
+    `最接近的大纲条目：${JSON.stringify(focusEntry || {})}`,
+    `本等级功能词参考：${JSON.stringify(levelHints)}`,
+    `相关语法参考：${JSON.stringify(grammarHints)}`,
+    "输出要求：",
+    "1. 《一、能力拆解》必须明确：学生要识别什么信息、理解什么关系、完成什么输出。",
+    "2. 《二、推荐语料与材料入口》必须给出 3 至 5 种真的适合这条 can-do 的语料类型或文本形式。",
+    "3. 《三、可直接发给学生的课堂任务》必须给可以马上发下去做的任务，不是教学原则。",
+    "4. 《四、讨论题 / 输出题》必须给真正能问学生的问题；如果是低级别，就给图卡、配对、指认、简单问答；如果是中高级，再给 AP/IB/OPI 风格问题。",
+    "5. 《五、教师备课提醒》只保留最关键的 2 至 4 条，必须紧贴这条 can-do 本身，不要泛谈大主题。",
+    "6. 全文要短、准、具体，不要写成长篇报告。",
+    'JSON schema: {"documentTitle":"","overview":"","sections":[{"title":"一、能力拆解","items":["",""]},{"title":"二、推荐语料与材料入口","items":["",""]},{"title":"三、可直接发给学生的课堂任务","items":["",""]},{"title":"四、讨论题 / 输出题","items":["",""]},{"title":"五、教师备课提醒","items":["",""]}]}',
   ].join("\n");
 
   const parsed = await requestJson(prompt);
@@ -254,7 +274,7 @@ async function requestText(prompt) {
 
   const chat = await client.chat.completions.create({
     model: providerConfig.model,
-    temperature: 0.3,
+    temperature: 0.15,
     messages: [
       { role: "system", content: system },
       { role: "user", content: prompt },
