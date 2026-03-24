@@ -8,7 +8,9 @@ export default async function middleware(request) {
     return;
   }
 
-  const { pathname, search } = request.nextUrl;
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+  const search = url.search || "";
   if (
     pathname === "/login" ||
     pathname === "/login.html" ||
@@ -21,7 +23,7 @@ export default async function middleware(request) {
     return;
   }
 
-  const authCookie = request.cookies.get(COOKIE_NAME)?.value || "";
+  const authCookie = parseCookie(request.headers.get("cookie") || "", COOKIE_NAME);
   if (authCookie && authCookie === (await expectedCookieValue())) {
     return;
   }
@@ -48,4 +50,15 @@ async function sha256Hex(value) {
   return Array.from(new Uint8Array(digest))
     .map((item) => item.toString(16).padStart(2, "0"))
     .join("");
+}
+
+function parseCookie(header, name) {
+  const items = String(header || "").split(/;\s*/);
+  for (const item of items) {
+    const [key, ...rest] = item.split("=");
+    if (key === name) {
+      return rest.join("=");
+    }
+  }
+  return "";
 }
