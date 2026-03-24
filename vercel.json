@@ -1,5 +1,6 @@
 {
-  "buildCommand": "npm run build:data && node ./scripts/prepare_public.mjs",
   "framework": null,
-  "cleanUrls": true
+  "cleanUrls": true,
+  "buildCommand": "echo skip-vercel-build",
+  "outputDirectory": "public"
 }

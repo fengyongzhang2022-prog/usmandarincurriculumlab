@@ -1,0 +1,40 @@
+[
+  {
+    "step": "home-title",
+    "title": "美国中文教学资源平台"
+  },
+  {
+    "step": "featured-count",
+    "count": 5
+  },
+  {
+    "step": "novice-weather-tables",
+    "count": 3
+  },
+  {
+    "step": "novice-weather-result",
+    "text": "我能听懂简单的天气描述。"
+  },
+  {
+    "step": "novice-breakfast-images",
+    "count": 0
+  },
+  {
+    "step": "novice-breakfast-caption",
+    "text": ""
+  },
+  {
+    "step": "assistant-example-cards",
+    "count": 0
+  },
+  {
+    "step": "assistant-activity-text",
+    "text": "\n      \n        任务\n        围绕“兴趣爱好”完成一个从理解到表达的课堂任务包，目标对齐：I can identify my favorite people, places, or things from a list. 我能从列表中指出最喜欢的人、地点或事物。\n      \n    \n      \n        热身\n        用 喜欢 / 爱 / 不 / 爸爸(爸) 做 3 分钟快问快答，激活已有词汇。\n      \n    \n      \n        输入\n        教师展示一张与“兴趣爱好”相关的图片，让学生圈出听到的关键词并判断信息重点。\n      \n    \n      \n        教师脚本\n        教师先说：先听，不要急着写。听完以后告诉同伴你听到了什么，再补充一个细节。如果不确定，可以用“我觉得”“我听到”来试着表达。\n      \n    \n      \n        输出\n        学生完成一个 理解诠释 任务：先两人练习，再以 AP/IB/OPI 风格做 45-60 秒口头或书面产出。\n      \n    \n      \n        学生产出\n        学生至少使用 喜欢、爱、不、爸爸(爸) 中的若干词，完成一句信息陈述和一句带细节的补充。\n      \n    \n      \n        拓展\n        可拓展为比较任务、角色扮演、图片描述、信息差活动或跨文化回应。\n      \n    \n      \n        分层\n        基础组先做关键词替换和句型支架；提升组加入原因、比较或跨文化延伸。\n      \n    \n      \n        评估\n        教师可按是否完成任务、是否提供细节、是否能持续表达三项做快速观察记录。\n      \n    "
+  },
+  {
+    "step": "wx-links",
+    "hrefs": [
+      "https://mp.weixin.qq.com/s/cyLUAN--C8uEEM88QIUSIA"
+    ]
+  }
+]

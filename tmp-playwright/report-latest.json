@@ -1,0 +1,33 @@
+[
+  {
+    "step": "featured-count",
+    "count": 5
+  },
+  {
+    "step": "featured-titles",
+    "titles": [
+      "请大家帮帮我！我的小狗不见了！",
+      "Mario Kart 游戏说明",
+      "《恋爱的犀牛》节选",
+      "@Foodie_XiaoBai",
+      "01 岗位信息"
+    ]
+  },
+  {
+    "step": "novice-like-table",
+    "tableCount": 0,
+    "imgCount": 1
+  },
+  {
+    "step": "assistant-open",
+    "open": true
+  },
+  {
+    "step": "assistant-example-count",
+    "count": 4
+  },
+  {
+    "step": "assistant-activity-count",
+    "count": 9
+  }
+]

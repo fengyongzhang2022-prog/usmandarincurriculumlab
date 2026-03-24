@@ -30,7 +30,44 @@ npm start
 
 - <http://localhost:3000>
 
-## 3. Vercel 发布
+## 3. 站点密码保护
+
+项目现在支持两种方式保护网站：
+
+1. 明文密码
+2. `SHA-256` 哈希密码
+
+推荐优先使用哈希密码。
+
+如果你想先给内部教师试用，可在本地或 Vercel 环境变量中设置：
+
+```powershell
+$env:SITE_USERNAME="teacher"
+$env:SITE_PASSWORD="你的强密码"
+```
+
+如果你更希望不直接保存明文密码，可改用：
+
+```powershell
+$env:SITE_USERNAME="teacher"
+$env:SITE_PASSWORD_HASH="你的SHA256十六进制哈希"
+```
+
+PowerShell 生成 `SHA-256` 哈希示例：
+
+```powershell
+$bytes = [System.Text.Encoding]::UTF8.GetBytes("你的强密码")
+$hash = [System.Security.Cryptography.SHA256]::HashData($bytes)
+($hash | ForEach-Object { $_.ToString("x2") }) -join ""
+```
+
+说明：
+
+- 如果 `SITE_PASSWORD` 和 `SITE_PASSWORD_HASH` 都为空，网站默认公开
+- 如果同时存在，优先使用 `SITE_PASSWORD_HASH`
+- Vercel `middleware.js` 和本地 `server/server.js` 都会执行同一套 Basic Auth 校验
+
+## 4. Vercel 发布
 
 仓库已经补好了 Vercel 所需结构：
 
@@ -55,7 +92,7 @@ npm start
 npm run build:web
 ```
 
-## 4. 接入模型 API
+## 5. 接入 DeepSeek / 兼容模型 API
 
 这个项目现在支持 OpenAI 兼容方式接入：
 
@@ -113,7 +150,53 @@ npm start
   [\.env.vercel.kimi.example](D:\2026 ACTFL 词表\词表202603\.env.vercel.kimi.example)
   [\.env.vercel.siliconflow.example](D:\2026 ACTFL 词表\词表202603\.env.vercel.siliconflow.example)
 
-## 5. 目录说明
+当前文本生成已改成“兼容 OpenAI SDK + Chat Completions 回退”的方式：
+
+- OpenAI 优先走官方能力
+- DeepSeek / Kimi / SiliconFlow 走兼容式文本调用
+- 这比单纯依赖 `responses.create` 更适合实际部署
+
+## 6. GitHub -> Vercel 自动发布
+
+如果你不想依赖 GitHub App 直连，也可以直接使用仓库里的 GitHub Actions：
+
+- [\.github/workflows/vercel-production.yml](D:\2026 ACTFL 词表\词表202603\.github\workflows\vercel-production.yml)
+
+你只需要在 GitHub 仓库里配置 3 个 Secrets：
+
+```text
+VERCEL_TOKEN
+VERCEL_ORG_ID
+VERCEL_PROJECT_ID
+```
+
+工作流会在 `main` 分支 push 时自动：
+
+1. 安装依赖
+2. 重新生成数据与 `public`
+3. 调用 Vercel CLI 构建
+4. 发布到 Production
+
+## 7. 域名绑定
+
+发布成功后，在 Vercel 项目里进入：
+
+`Settings -> Domains`
+
+然后绑定你在腾讯云或阿里云购买的域名。
+
+常见做法：
+
+- 根域名：按 Vercel 提示配置 `A` 记录
+- `www`：按 Vercel 提示配置 `CNAME`
+
+建议：
+
+- 主域名用 `.com`
+- 如果面向中国大陆访问较多，再补一个 `.cn` 跳转
+- 域名解析完全以 Vercel 面板生成的记录值为准，不手抄旧教程
+
+## 8. 目录说明
 
 - [scripts/build_vocabulary_dataset.py](D:\2026 ACTFL 词表\词表202603\scripts\build_vocabulary_dataset.py)：解析 9 份 `docx` 并生成结构化数据
 - [scripts/prepare_public.mjs](D:\2026 ACTFL 词表\词表202603\scripts\prepare_public.mjs)：准备 Vercel `public` 静态资源

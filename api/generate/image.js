@@ -1,14 +1,16 @@
 import { pickFocusEntry } from "../../server/content-engine.js";
 import { generateTopicImage } from "../../server/openai-service.js";
+import { readJsonBody, sendMethodNotAllowed } from "../_lib/http.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    res.status(405).json({ error: "Method not allowed" });
+    sendMethodNotAllowed(res, ["POST"]);
     return;
   }
 
   try {
-    const entry = pickFocusEntry(req.body || {});
+    const body = await readJsonBody(req);
+    const entry = pickFocusEntry(body || {});
     const image = await generateTopicImage(entry);
     res.status(200).json(image);
   } catch (error) {

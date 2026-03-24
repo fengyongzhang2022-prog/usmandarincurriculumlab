@@ -1,0 +1,158 @@
+{
+  "total": {
+    "actfl": 381,
+    "hsk": 593,
+    "pg": 558
+  },
+  "corr_types": {
+    "N:1（多ACTFL→单HSK/PG）": 199,
+    "1:N（单ACTFL→多HSK/PG行）": 13,
+    "1:1（精确对应）": 47,
+    "ACTFL独有（0匹配）": 122
+  },
+  "appendix": {
+    "HSK+PG共有": 137,
+    "PG独有": 177,
+    "HSK独有": 102
+  },
+  "hsk_coverage": 54.6,
+  "pg_coverage": 43.7,
+  "matched_any": 259,
+  "matched_both": 175,
+  "one_to_n_examples": [
+    [
+      "方位名词",
+      "Novice Low",
+      3,
+      1
+    ],
+    [
+      "能愿动词",
+      "Novice Low",
+      6,
+      8
+    ],
+    [
+      "趋向动词",
+      "Novice Low",
+      7,
+      5
+    ],
+    [
+      "结构助词",
+      "Novice Low",
+      3,
+      3
+    ],
+    [
+      "动态助词",
+      "Novice Low",
+      3,
+      3
+    ],
+    [
+      "语气助词",
+      "Novice Low",
+      4,
+      3
+    ],
+    [
+      "定语",
+      "Novice Low",
+      3,
+      3
+    ],
+    [
+      "定语",
+      "Novice Low",
+      3,
+      3
+    ],
+    [
+      "状语",
+      "Novice Low",
+      2,
+      2
+    ],
+    [
+      "复句",
+      "Novice Low",
+      70,
+      9
+    ],
+    [
+      "特指问句",
+      "Novice Low",
+      2,
+      0
+    ],
+    [
+      "祈使句",
+      "Novice Low",
+      2,
+      1
+    ],
+    [
+      "“有”字句",
+      "Novice Low",
+      4,
+      3
+    ],
+    [
+      "连动句",
+      "Novice Low",
+      4,
+      2
+    ],
+    [
+      "进行态",
+      "Novice Low",
+      3,
+      1
+    ]
+  ],
+  "level_stats": {
+    "Novice Low": {
+      "n": 34,
+      "matched_any": 32,
+      "matched_both": 26,
+      "actfl_only": 2
+    },
+    "Novice Mid": {
+      "n": 47,
+      "matched_any": 39,
+      "matched_both": 34,
+      "actfl_only": 8
+    },
+    "Novice High": {
+      "n": 49,
+      "matched_any": 37,
+      "matched_both": 28,
+      "actfl_only": 12
+    },
+    "Intermediate  Low": {
+      "n": 44,
+      "matched_any": 34,
+      "matched_both": 18,
+      "actfl_only": 10
+    },
+    "Intermediate Mid": {
+      "n": 34,
+      "matched_any": 28,
+      "matched_both": 16,
+      "actfl_only": 6
+    },
+    "Intermediate High": {
+      "n": 28,
+      "matched_any": 20,
+      "matched_both": 7,
+      "actfl_only": 8
+    },
+    "Advanced+": {
+      "n": 145,
+      "matched_any": 69,
+      "matched_both": 46,
+      "actfl_only": 76
+    }
+  }
+}

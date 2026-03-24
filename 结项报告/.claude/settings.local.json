@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/ThinkPad/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/8968f63b-7c24-4462-8b6d-0c3f4520ba26/b665159b-766f-4028-b527-9d4f55b1fa26/skills/docx/**)",
+      "Bash(python scripts/office/unpack.py \"D:\\\\2026 ACTFL 词表\\\\词表202603\\\\结项报告\\\\语法量表总表.docx\" \"D:\\\\2026 ACTFL 词表\\\\词表202603\\\\结项报告\\\\unpacked_grammar/\")",
+      "Bash(pip install:*)",
+      "Bash(python -m pip install defusedxml -q)",
+      "Bash(python -m pip install openpyxl -q)",
+      "Bash(python \"D:\\\\2026 ACTFL 词表\\\\词表202603\\\\结项报告\\\\parse_grammar.py\")",
+      "Bash(python3:*)",
+      "Bash(python \"D:\\\\2026 ACTFL 词表\\\\词表202603\\\\结项报告\\\\build_grammar_crossref.py\")",
+      "Bash(python \"D:\\\\2026 ACTFL 词表\\\\词表202603\\\\结项报告\\\\grammar_analysis.py\")",
+      "Bash(node -e \"require\\(''docx''\\)\")",
+      "Bash(npm install:*)"
+    ]
+  }
+}

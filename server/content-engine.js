@@ -1,13 +1,20 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import XLSX from "xlsx";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, "..");
-const DATA_PATH = path.join(ROOT, "site", "data.json");
+const DATA_PATH = fs.existsSync(path.join(ROOT, "site", "data.json"))
+  ? path.join(ROOT, "site", "data.json")
+  : path.join(ROOT, "public", "data.json");
+const VOCAB_XLSX_PATH = path.join(ROOT, "2026美国中文教学词汇与语法等级量表", "2026_ACTFL_Vocabulary_WithFilters.xlsx");
+const GRAMMAR_XLSX_PATH = path.join(ROOT, "2026美国中文教学词汇与语法等级量表", "ACTFL语法量表总表.xlsx");
 
 const data = JSON.parse(fs.readFileSync(DATA_PATH, "utf-8"));
+const vocabIndex = buildVocabIndex();
+const grammarIndex = buildGrammarIndex();
 
 const levelPriorities = data.summary.levels;
 
@@ -18,6 +25,7 @@ export function getDataset() {
 export function findEntries(filters = {}) {
   return data.entries.filter((entry) => {
     if (filters.level && entry.level !== filters.level) return false;
+    if (filters.mode && entry.mode !== filters.mode) return false;
     if (filters.themeCode && entry.themeCode !== filters.themeCode) return false;
     if (filters.subthemeCode && entry.subthemeCode !== filters.subthemeCode) return false;
     if (filters.topicCode && entry.topicCode !== filters.topicCode) return false;
@@ -59,12 +67,74 @@ export function pickFocusEntry({ id, topicCode, level }) {
   return broader[0] || data.entries[0];
 }
 
+export function getModes() {
+  return ["理解诠释", "人际沟通", "表达演示"];
+}
+
+export function getLevelResources(level) {
+  return (data.levelResources || []).filter((item) => !level || item.level === level);
+}
+
 export function tokenizeWords(text, limit = 10) {
   return String(text || "")
     .split(/[，,、；;。\s]+/)
     .map((item) => item.trim())
     .filter(Boolean)
     .slice(0, limit);
+}
+
+export function getVocabIndexSummary() {
+  return {
+    count: vocabIndex.items.length,
+    levels: [...new Set(vocabIndex.items.map((item) => item.actfl).filter(Boolean))],
+  };
+}
+
+export function getGrammarIndexSummary() {
+  return {
+    count: grammarIndex.items.length,
+    levels: [...new Set(grammarIndex.items.map((item) => item.level).filter(Boolean))],
+    categories: [...new Set(grammarIndex.items.map((item) => item.category).filter(Boolean))],
+  };
+}
+
+export function searchGrammar({ level = "", query = "" } = {}) {
+  const needle = String(query || "").trim().toLowerCase();
+  return grammarIndex.items.filter((item) => {
+    if (level && item.level !== level) return false;
+    if (!needle) return true;
+    const haystack = [item.level, item.category, item.grammar, item.example].join(" ").toLowerCase();
+    return haystack.includes(needle);
+  });
+}
+
+export function searchVocabulary(query) {
+  const words = normalizeInputWords(query);
+  if (!words.length) return [];
+  const map = new Map();
+  for (const word of words) {
+    map.set(word, vocabIndex.byWord.get(word) || []);
+  }
+  return [...map.entries()].map(([word, matches]) => ({ word, matches }));
+}
+
+export function analyzePassage(text) {
+  const tokens = segmentText(text);
+  const results = tokens.map((token) => ({
+    token,
+    matches: vocabIndex.byWord.get(token) || [],
+  }));
+
+  const counts = new Map();
+  for (const item of results) {
+    const level = item.matches[0]?.actfl || "未收录";
+    counts.set(level, (counts.get(level) || 0) + 1);
+  }
+
+  return {
+    tokens: results,
+    counts: [...counts.entries()].map(([level, count]) => ({ level, count })),
+  };
 }
 
 export function buildFallbackLessonPack(entry) {
@@ -174,4 +244,128 @@ export function buildFallbackImage(entry) {
 
 function sanitizeSvgText(value) {
   return String(value).replace(/[<>&"]/g, "");
+}
+
+function buildVocabIndex() {
+  if (!fs.existsSync(VOCAB_XLSX_PATH)) {
+    return { items: [], byWord: new Map(), dict: [] };
+  }
+
+  const workbook = XLSX.readFile(VOCAB_XLSX_PATH);
+  const sheetName = workbook.SheetNames[0];
+  const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+  const items = rows.map((row) => ({
+    word: String(row["词语"] || "").trim(),
+    pos: String(row["词性"] || "").trim(),
+    actfl: String(row["ACTFL等级"] || "").trim(),
+    hsk: String(row["HSK等级"] || "").trim(),
+    pg: String(row["PG等级"] || "").trim(),
+    basicEdu: String(row["义务教育等级"] || "").trim(),
+  })).filter((item) => item.word);
+
+  const byWord = new Map();
+  for (const item of items) {
+    if (!byWord.has(item.word)) byWord.set(item.word, []);
+    byWord.get(item.word).push(item);
+  }
+
+  const dict = [...byWord.keys()].sort((a, b) => b.length - a.length);
+  return { items, byWord, dict };
+}
+
+function buildGrammarIndex() {
+  if (!fs.existsSync(GRAMMAR_XLSX_PATH)) {
+    return { items: [] };
+  }
+
+  const workbook = XLSX.readFile(GRAMMAR_XLSX_PATH);
+  const sheetName = workbook.SheetNames[0];
+  const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+  const items = rows
+    .map((row, index) => ({
+      id: `grammar-${index + 1}`,
+      level: normalizeSpaces(row["等级"]),
+      category: normalizeSpaces(row["语法类"]),
+      grammar: normalizeSpaces(row["语法项"]),
+      example: String(row["例句"] || "").trim(),
+    }))
+    .filter((item) => item.level || item.category || item.grammar);
+
+  return { items };
+}
+
+function normalizeInputWords(input) {
+  return String(input || "")
+    .split(/[\s,，、；;]+/)
+    .map((word) => word.trim())
+    .filter(Boolean);
+}
+
+function normalizeSpaces(value) {
+  return String(value || "").replace(/\s+/g, " ").trim();
+}
+
+function segmentText(text) {
+  const segmenter = new Intl.Segmenter("zh-CN", { granularity: "word" });
+  const rawSegments = [...segmenter.segment(String(text || ""))]
+    .map((item) => item.segment.trim())
+    .filter(Boolean)
+    .filter((item) => /[\u4e00-\u9fffA-Za-z0-9]/.test(item));
+
+  return rawSegments.flatMap((segment) => {
+    if (vocabIndex.byWord.has(segment)) return [segment];
+    if (segment.length <= 1) return [segment];
+    return decomposeSegment(segment);
+  });
+}
+
+function lookupWord(word) {
+  const exact = vocabIndex.byWord.get(word) || [];
+  if (exact.length) return exact;
+
+  const segmented = decomposeSegment(word)
+    .filter((part) => part !== word)
+    .flatMap((part) => vocabIndex.byWord.get(part) || []);
+
+  if (segmented.length) return dedupeMatches(segmented).slice(0, 12);
+
+  return vocabIndex.items
+    .filter((item) => item.word.includes(word) || word.includes(item.word))
+    .slice(0, 12);
+}
+
+function decomposeSegment(segment) {
+  const tokens = [];
+  let i = 0;
+
+  while (i < segment.length) {
+    let matched = "";
+    for (const candidate of vocabIndex.dict) {
+      if (segment.startsWith(candidate, i)) {
+        matched = candidate;
+        break;
+      }
+    }
+
+    if (matched) {
+      tokens.push(matched);
+      i += matched.length;
+      continue;
+    }
+
+    tokens.push(segment[i]);
+    i += 1;
+  }
+
+  return tokens;
+}
+
+function dedupeMatches(matches) {
+  const seen = new Set();
+  return matches.filter((item) => {
+    const key = `${item.word}|${item.pos}|${item.actfl}|${item.hsk}|${item.pg}|${item.basicEdu}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }

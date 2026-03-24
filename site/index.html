@@ -3,172 +3,409 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ACTFL 中文教学备课平台</title>
+  <title>美国中文教学资源平台</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand-block">
-        <div class="brand-token">文</div>
-        <div>
-          <p class="eyebrow">Teacher Studio</p>
-          <h1>ACTFL 中文教学备课平台</h1>
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="hero-banner hero-banner-centered">
+        <div class="hero-copy hero-copy-centered">
+          <p class="brand-kicker">US Mandarin Lab</p>
+          <h1>美国中文教学资源平台</h1>
+          <p class="hero-summary">面向美国一线中文教师的专业教学网站。围绕 ACTFL 中文词汇量表与教学大纲，提供教学材料检索、原始语料查看、词汇等级反查、语法量表入口与教学材料生成支持。</p>
+          <p class="hero-project-note">本网站为教育部语言合作交流中心项目“美国本土版中文教育词汇与语法量表研制”部分成果。</p>
         </div>
       </div>
-      <div class="topbar-meta">
-        <div class="meta-pill">AP Chinese</div>
-        <div class="meta-pill">IB Chinese</div>
-        <div class="meta-pill">ACTFL OPI</div>
-        <div class="meta-pill">College Chinese</div>
-      </div>
+      <nav class="main-nav">
+        <button class="nav-tab is-active" data-view="homeView">首页</button>
+        <button class="nav-tab" data-view="outlineView">教学大纲检索</button>
+        <button class="nav-tab" data-view="vocabView">词汇等级反查</button>
+        <button class="nav-tab" data-view="grammarView">语法大纲</button>
+        <button class="nav-tab" data-view="assistantView">智能备课</button>
+      </nav>
     </header>
 
-    <section class="hero-panel">
-      <div class="hero-copy">
-        <p class="eyebrow">面向美国一线中文教师</p>
-        <h2>把 ACTFL 词表、课堂语料、教研建议和 AI 生成备课支持放进同一个工作台</h2>
-        <p>
-          先选等级、主题、子主题、话题，再查看不同等级的词汇梯度；右侧可一键生成更多例句、教学配图与“三专家圆桌”建议，
-          适合备 AP/IB 中文、ACTFL OPI、大学中文课程。
-        </p>
-      </div>
-      <div class="hero-stats" id="heroStats"></div>
-    </section>
+    <main class="main-content">
+      <section id="homeView" class="view is-active">
+        <section class="home-hero">
+          <article class="home-copy-card">
+            <p class="section-kicker">网站简介</p>
+            <h2>从能做描述进入语篇，再从语篇回到课堂</h2>
+            <p>首页提供按等级与按完整语篇两种入口。进入具体模块后，可进一步查看能做描述、原始语料、配套词语、跨等级比较、词汇等级与语法分布。</p>
+          </article>
+        </section>
 
-    <section class="filter-panel">
-      <label>
-        <span>等级</span>
-        <select id="levelFilter"></select>
-      </label>
-      <label>
-        <span>主题</span>
-        <select id="themeFilter"></select>
-      </label>
-      <label>
-        <span>子主题</span>
-        <select id="subthemeFilter"></select>
-      </label>
-      <label>
-        <span>话题</span>
-        <select id="topicFilter"></select>
-      </label>
-      <label>
-        <span>检索</span>
-        <input id="searchInput" type="search" placeholder="搜 can-do、词汇、样例、教学场景">
-      </label>
-    </section>
+        <section class="home-levels">
+          <div class="section-headline">
+            <div>
+              <p class="section-kicker">按等级进入</p>
+              <h2>选择一个 ACTFL 等级</h2>
+            </div>
+          </div>
+          <div id="homeLevelGrid" class="level-grid"></div>
+        </section>
 
-    <section class="workspace">
-      <aside class="results-column">
-        <div class="section-head">
+        <section class="home-features">
+          <div class="section-headline">
+            <div>
+              <p class="section-kicker">精选语篇</p>
+              <h2>从完整语篇进入材料库</h2>
+            </div>
+          </div>
+          <div class="featured-rail">
+            <button id="featuredPrevBtn" class="rail-button" type="button" aria-label="上一组">‹</button>
+            <div id="featuredGrid" class="featured-grid"></div>
+            <button id="featuredNextBtn" class="rail-button" type="button" aria-label="下一组">›</button>
+          </div>
+        </section>
+
+        <section class="home-modules">
+          <div class="section-headline">
+            <div>
+              <p class="section-kicker">核心模块</p>
+              <h2>按任务进入具体功能</h2>
+            </div>
+          </div>
+          <div class="module-grid">
+            <article class="module-card" data-jump-view="outlineView">
+              <div class="module-icon">检</div>
+              <h3>教学大纲检索</h3>
+              <p>按等级、模态、主题、话题与示例检索材料，查看 can-do、语篇与配套词语。</p>
+            </article>
+            <article class="module-card" data-jump-view="vocabView">
+              <div class="module-icon">词</div>
+              <h3>词汇等级反查</h3>
+              <p>查询一个词、一组词或整篇课文的 ACTFL 等级分布。</p>
+            </article>
+            <article class="module-card" data-jump-view="grammarView">
+              <div class="module-icon">语</div>
+              <h3>语法大纲</h3>
+              <p>按等级、语法点与功能定位语法项目，并查看其在大纲中的分布与示例。</p>
+            </article>
+            <article class="module-card" data-jump-view="assistantView">
+              <div class="module-icon">助</div>
+              <h3>智能备课</h3>
+              <p>基于词汇、语法与能做描述生成更贴近课堂场景的教学材料。</p>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section id="outlineView" class="view">
+        <article class="module-intro-card">
           <div>
-            <p class="eyebrow">Result Explorer</p>
-            <h3>材料浏览</h3>
+            <p class="section-kicker">模块简介</p>
+            <h2>按等级、模态、主题与话题检索教学材料</h2>
+            <p>按等级、模态、主题、子主题与话题浏览材料。页面优先呈现与 can-do 紧密对应的原始语篇、配套词语与同话题跨等级材料。</p>
           </div>
-          <div id="resultMeta" class="result-meta"></div>
+        </article>
+
+        <section class="filter-panel">
+          <div class="filter-grid filter-grid-compact">
+            <label>
+              <span>等级</span>
+              <select id="levelFilter"></select>
+            </label>
+            <label>
+              <span>模态</span>
+              <select id="modeFilter"></select>
+            </label>
+            <label>
+              <span>主题</span>
+              <select id="themeFilter"></select>
+            </label>
+            <label>
+              <span>子主题</span>
+              <select id="subthemeFilter"></select>
+            </label>
+            <label>
+              <span>话题</span>
+              <select id="topicFilter"></select>
+            </label>
+          </div>
+        </section>
+
+        <div class="outline-layout">
+          <aside class="results-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">检索结果</p>
+                <h3>结果列表</h3>
+              </div>
+              <div id="resultMeta" class="meta-number"></div>
+            </div>
+            <div id="activePath" class="active-path"></div>
+            <div id="resultsList" class="results-list"></div>
+          </aside>
+
+          <section class="detail-stage">
+            <article class="can-do-card">
+              <div class="panel-heading">
+                <div>
+                  <p class="section-kicker">能做描述</p>
+                  <h3 id="detailTitleZh">请选择一个条目</h3>
+                </div>
+              </div>
+              <p id="detailTitleEn" class="detail-english"></p>
+              <div id="detailMeta" class="detail-meta"></div>
+            </article>
+
+            <div class="detail-grid">
+              <div class="main-stack">
+                <article class="content-card sample-card">
+                  <div class="panel-heading">
+                    <div>
+                      <p class="section-kicker">原始语料</p>
+                      <h3>语篇与示例</h3>
+                    </div>
+                  </div>
+                  <div id="sampleMediaStrip" class="sample-media-strip" hidden></div>
+                  <div id="sampleText" class="corpus-block"></div>
+                </article>
+
+                <article class="content-card">
+                  <div class="panel-heading">
+                    <div>
+                      <p class="section-kicker">跨等级比较</p>
+                      <h3>同话题不同等级</h3>
+                    </div>
+                  </div>
+                  <div id="comparisonList" class="comparison-list"></div>
+                </article>
+              </div>
+
+              <aside class="reference-stack">
+                <article class="content-card">
+                  <div class="panel-heading">
+                    <div>
+                      <p class="section-kicker">配套词语</p>
+                      <h3>核心词语</h3>
+                    </div>
+                  </div>
+                  <div id="coreWords" class="vocab-block"></div>
+                </article>
+
+                <article class="content-card">
+                  <div class="panel-heading">
+                    <div>
+                      <p class="section-kicker">拓展支持</p>
+                      <h3>相关词语</h3>
+                    </div>
+                  </div>
+                  <div id="relatedWords" class="vocab-block"></div>
+                </article>
+
+                <article class="content-card compact-card">
+                  <div class="panel-heading">
+                    <div>
+                      <p class="section-kicker">参考资源</p>
+                      <h3>本等级功能词</h3>
+                    </div>
+                  </div>
+                  <div id="levelSharedWords" class="resource-stack"></div>
+                </article>
+              </aside>
+            </div>
+          </section>
         </div>
-        <div id="activePath" class="active-path"></div>
-        <div id="resultsList" class="results-list"></div>
-      </aside>
+      </section>
 
-      <main class="detail-column">
-        <section class="detail-card feature-card">
-          <div class="feature-copy">
-            <p class="eyebrow">Selected Entry</p>
-            <h3 id="detailTitle">请选择一个条目</h3>
-            <p id="detailPath" class="detail-path"></p>
-            <div class="badge-row">
-              <span id="detailLevel" class="badge badge-level"></span>
-              <span id="detailMode" class="badge badge-mode"></span>
-            </div>
+      <section id="vocabView" class="view">
+        <article class="module-intro-card">
+          <div>
+            <p class="section-kicker">模块简介</p>
+            <h2>查询词语等级，或分析整篇课文的词汇分布</h2>
+            <p>可输入一个词、一组词，或粘贴整篇课文。系统会基于 ACTFL 词表给出等级、词性与分布比例；结果仅供参考，因分词会受上下文语境影响，可能存在误差。</p>
           </div>
-          <div class="feature-media">
-            <img id="topicImage" alt="教学配图">
-          </div>
-        </section>
+          <div id="vocabSummary" class="module-summary"></div>
+        </article>
 
-        <section class="detail-grid">
-          <article class="detail-card">
-            <div class="section-head">
+        <div class="tool-layout">
+          <article class="content-card">
+            <div class="panel-heading">
               <div>
-                <p class="eyebrow">Core Vocabulary</p>
-                <h3>核心词汇</h3>
+                <p class="section-kicker">查询入口</p>
+                <h3>查词 / 查词组</h3>
               </div>
             </div>
-            <div id="coreWords" class="rich-text"></div>
+            <div class="tool-form">
+              <textarea id="vocabQueryInput" placeholder="输入一个词或多个词，用空格、逗号或顿号分隔"></textarea>
+              <button id="vocabSearchBtn" class="primary-button" type="button">查询词汇等级</button>
+            </div>
+            <div id="vocabSearchResults" class="analysis-panel empty-copy">查询结果会显示在这里。</div>
           </article>
 
-          <article class="detail-card">
-            <div class="section-head">
+          <article class="content-card">
+            <div class="panel-heading">
               <div>
-                <p class="eyebrow">Related Vocabulary</p>
-                <h3>相关词汇</h3>
+                <p class="section-kicker">篇章分析</p>
+                <h3>查一篇课文</h3>
               </div>
             </div>
-            <div id="relatedWords" class="rich-text"></div>
+            <div class="tool-form">
+              <textarea id="passageInput" placeholder="粘贴一篇课文、阅读材料或学生作品"></textarea>
+              <button id="passageAnalyzeBtn" class="primary-button" type="button">分析词汇等级</button>
+            </div>
+            <div id="passageAnalysis" class="analysis-panel empty-copy">分析结果会显示在这里。</div>
           </article>
-        </section>
+        </div>
+      </section>
 
-        <section class="detail-card">
-          <div class="section-head">
+      <section id="grammarView" class="view">
+        <article class="module-intro-card">
+          <div>
+            <p class="section-kicker">模块简介</p>
+            <h2>语法大纲入口</h2>
+            <p>语法大纲页面聚焦查询与定位，当前支持按等级查看语法项目，以及按语法项检索例句与分布，不承担生成型任务。</p>
+          </div>
+        </article>
+
+        <div class="tool-layout">
+          <article class="content-card">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">等级查询</p>
+                <h3>按等级查语法</h3>
+              </div>
+            </div>
+            <div class="tool-form">
+              <select id="grammarLevelFilter"></select>
+              <button id="grammarLevelBtn" class="primary-button" type="button">查看该等级语法</button>
+            </div>
+            <div id="grammarLevelResults" class="analysis-panel empty-copy">该等级语法项目会显示在这里。</div>
+          </article>
+
+          <article class="content-card">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker">语法项查询</p>
+                <h3>按语法点查例句</h3>
+              </div>
+            </div>
+            <div class="tool-form">
+              <input id="grammarQueryInput" type="text" placeholder="输入“把字句、结果补语、连动句”等语法项">
+              <button id="grammarQueryBtn" class="primary-button" type="button">检索语法项</button>
+            </div>
+            <div id="grammarQueryResults" class="analysis-panel empty-copy">相关语法项目与例句会显示在这里。</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="assistantView" class="view">
+        <article class="module-intro-card">
+          <div>
+            <p class="section-kicker">模块简介</p>
+            <h2>智能备课</h2>
+            <p>从教师真实备课入口出发：输入一个词、两三个近义词，或直接粘贴 can-do，生成可直接继续修改的教学支架、辨析材料与课堂任务。</p>
+          </div>
+        </article>
+
+        <div class="assistant-grid">
+          <article class="content-card assistant-card">
+            <h3>目标词教学材料</h3>
+            <p>输入一个目标词，生成等级定位、课堂讲解角度、搭配、例句与可直接使用的课堂活动。</p>
+          </article>
+          <article class="content-card assistant-card">
+            <h3>近义词对比</h3>
+            <p>输入两个或多个近义词，生成语义差别、典型搭配、常见误用与对比练习。</p>
+          </article>
+          <article class="content-card assistant-card">
+            <h3>Can-do 转课堂任务</h3>
+            <p>粘贴能做描述，生成任务链、教师脚本、学生产出与简短测评建议。</p>
+          </article>
+        </div>
+
+        <article class="content-card assistant-workbench">
+          <div class="panel-heading">
             <div>
-              <p class="eyebrow">Corpus</p>
-              <h3>原始样例语料</h3>
+              <p class="section-kicker">生成入口</p>
+              <h3>选择一种备课方式</h3>
             </div>
           </div>
-          <div id="sampleText" class="sample-block"></div>
-        </section>
+          <p id="studioNote" class="drawer-note">当前未配置模型密钥时，系统会使用本地示范模板；接入 DeepSeek 后，会在同一结构下生成更完整的课堂材料。</p>
 
-        <section class="detail-card">
-          <div class="section-head">
+          <div class="assistant-tabs">
+            <button id="assistantTabWord" class="assistant-tab is-active" type="button" data-assistant-tab="word">词汇讲解</button>
+            <button id="assistantTabSynonyms" class="assistant-tab" type="button" data-assistant-tab="synonyms">近义词辨析</button>
+            <button id="assistantTabCanDo" class="assistant-tab" type="button" data-assistant-tab="cando">Can-do 生成</button>
+          </div>
+
+          <div id="assistantPaneWord" class="assistant-pane is-active">
+            <div class="assistant-form-grid">
+              <label>
+                <span>目标词</span>
+                <input id="assistantWordInput" type="text" placeholder="如：保护、经历、终于">
+              </label>
+              <label>
+                <span>目标等级（可选）</span>
+                <select id="assistantWordLevel"></select>
+              </label>
+            </div>
+            <button id="assistantWordBtn" class="primary-button" type="button">生成词汇教学材料</button>
+            <div id="assistantWordOutput" class="analysis-panel empty-copy">输入一个词后生成。</div>
+          </div>
+
+          <div id="assistantPaneSynonyms" class="assistant-pane">
+            <div class="assistant-form-grid">
+              <label class="assistant-span-2">
+                <span>近义词</span>
+                <input id="assistantSynonymsInput" type="text" placeholder="如：保护、保存；因为、由于；提高、提升">
+              </label>
+              <label>
+                <span>目标等级（可选）</span>
+                <select id="assistantSynonymsLevel"></select>
+              </label>
+            </div>
+            <button id="assistantSynonymsBtn" class="primary-button" type="button">生成近义词辨析</button>
+            <div id="assistantSynonymsOutput" class="analysis-panel empty-copy">输入两个或多个近义词后生成。</div>
+          </div>
+
+          <div id="assistantPaneCanDo" class="assistant-pane">
+            <div class="assistant-form-grid">
+              <label>
+                <span>目标等级（可选）</span>
+                <select id="assistantCanDoLevel"></select>
+              </label>
+              <label>
+                <span>模态（可选）</span>
+                <select id="assistantCanDoMode"></select>
+              </label>
+              <label class="assistant-span-2">
+                <span>能做描述</span>
+                <select id="assistantCanDoSelect"></select>
+              </label>
+            </div>
+            <button id="assistantCanDoBtn" class="primary-button" type="button">生成课堂任务</button>
+            <div id="assistantCanDoOutput" class="analysis-panel empty-copy">输入 can-do 后生成。</div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <details class="message-board">
+        <summary class="message-summary">
+          <div class="section-headline">
             <div>
-              <p class="eyebrow">Cross-Level View</p>
-              <h3>同话题跨等级对比</h3>
+              <p class="section-kicker">在线留言</p>
+              <h2>有问题或建议，直接写在这里</h2>
             </div>
           </div>
-          <div id="comparisonList" class="comparison-list"></div>
-        </section>
-
-        <section class="detail-card studio-card">
-          <div class="studio-head">
-            <div>
-              <p class="eyebrow">AI Lesson Lab</p>
-              <h3>扩展语料与备课支持</h3>
-            </div>
-            <button id="generateBtn" class="primary-button" type="button">生成更多例句与专家建议</button>
-          </div>
-          <p class="studio-note" id="studioNote">可连接 OpenAI API 生成更多样例语料、配图与教师视角建议；未配置 API key 时会自动使用本地演示模式。</p>
-
-          <div class="studio-grid">
-            <article class="studio-panel">
-              <h4>扩展示例语料</h4>
-              <div id="generatedExamples" class="generated-list empty-copy">选择条目后点击按钮生成。</div>
-            </article>
-
-            <article class="studio-panel">
-              <h4>微型任务链</h4>
-              <div id="generatedActivity" class="generated-list empty-copy">这里会生成导入、输入、输出和分层建议。</div>
-            </article>
-          </div>
-        </section>
-
-        <section class="detail-card debate-card">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Roundtable</p>
-              <h3>三专家圆桌</h3>
-            </div>
-          </div>
-          <div id="expertDebate" class="debate-grid">
-            <div class="empty-copy">生成后会在这里看到 AP/IB、OPI、大学中文三位专家的不同观点。</div>
-          </div>
-        </section>
-      </main>
-    </section>
+        </summary>
+        <p class="message-note">留言将由管理员统一整理，用于后续回复、修订与内容补充。</p>
+        <div class="message-form">
+          <input id="messageName" type="text" placeholder="姓名或学校（可选）">
+          <input id="messageEmail" type="email" placeholder="邮箱（可选）">
+          <textarea id="messageText" placeholder="请输入你的问题、建议或希望补充的材料"></textarea>
+          <button id="messageSubmitBtn" class="primary-button" type="button">提交留言</button>
+          <div id="messageStatus" class="message-status"></div>
+        </div>
+      </details>
+    </footer>
   </div>
 
   <script src="/app.js"></script>

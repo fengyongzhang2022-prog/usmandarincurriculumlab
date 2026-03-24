@@ -1,4 +1,4 @@
-import { getDataset } from "../server/content-engine.js";
+import { getDataset, getGrammarIndexSummary, getModes, getVocabIndexSummary } from "../server/content-engine.js";
 import { getProviderSummary, isOpenAIConfigured } from "../server/openai-service.js";
 
 export default function handler(_req, res) {
@@ -7,5 +7,8 @@ export default function handler(_req, res) {
     openaiConfigured: isOpenAIConfigured(),
     provider: getProviderSummary(),
     summary: getDataset().summary,
+    modes: getModes(),
+    vocab: getVocabIndexSummary(),
+    grammar: getGrammarIndexSummary(),
   });
 }

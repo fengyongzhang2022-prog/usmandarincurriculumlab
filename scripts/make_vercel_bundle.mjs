@@ -25,8 +25,6 @@ const includeDirs = [
   "api",
   "public",
   "server",
-  "scripts",
-  "site",
 ];
 
 fs.rmSync(releaseDir, { recursive: true, force: true });
@@ -46,7 +44,7 @@ function copyPath(source, target) {
   const stat = fs.statSync(source);
   if (stat.isDirectory()) {
     const name = path.basename(source);
-    if (["node_modules", "__pycache__", ".vercel", "release"].includes(name)) {
+    if (["node_modules", "__pycache__", ".vercel", ".git", "release"].includes(name)) {
       return;
     }
     fs.mkdirSync(target, { recursive: true });

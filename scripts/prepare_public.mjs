@@ -15,4 +15,24 @@ for (const file of ["index.html", "app.js", "styles.css", "data.js", "data.json"
   fs.copyFileSync(path.join(sourceDir, file), path.join(targetDir, file));
 }
 
+const mediaDir = path.join(sourceDir, "docx-media");
+if (fs.existsSync(mediaDir)) {
+  const targetMediaDir = path.join(targetDir, "docx-media");
+  fs.rmSync(targetMediaDir, { recursive: true, force: true });
+  copyDirectory(mediaDir, targetMediaDir);
+}
+
 console.log(`Prepared public assets in ${targetDir}`);
+
+function copyDirectory(source, target) {
+  fs.mkdirSync(target, { recursive: true });
+  for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
+    const sourcePath = path.join(source, entry.name);
+    const targetPath = path.join(target, entry.name);
+    if (entry.isDirectory()) {
+      copyDirectory(sourcePath, targetPath);
+    } else {
+      fs.copyFileSync(sourcePath, targetPath);
+    }
+  }
+}

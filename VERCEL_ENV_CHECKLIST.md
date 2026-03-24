@@ -15,6 +15,14 @@ SITE_PASSWORD=你自己设定的强密码
 
 - 没有设置 `SITE_PASSWORD` 时，网站默认公开访问
 - 设置后，整站会启用 Basic Auth
+- 如果你不想直接保存明文密码，可改用：
+
+```text
+SITE_USERNAME=teacher
+SITE_PASSWORD_HASH=你的SHA256十六进制哈希
+```
+
+- 如果 `SITE_PASSWORD_HASH` 和 `SITE_PASSWORD` 同时存在，优先使用哈希版本
 
 ## 二、DeepSeek
 
@@ -91,6 +99,16 @@ SITE_PASSWORD=你自己的密码
 LLM_PROVIDER=deepseek
 LLM_API_KEY=你的 DeepSeek Key
 LLM_MODEL=deepseek-chat
+```
+
+## 八、GitHub Actions 自动发布需要的 Secrets
+
+如果你采用仓库里的 GitHub Actions，而不是依赖 GitHub App 直接连 Vercel，请在 GitHub 仓库 Secrets 里补上：
+
+```text
+VERCEL_TOKEN
+VERCEL_ORG_ID
+VERCEL_PROJECT_ID
 ```
 
 如果你主要用 Kimi：
