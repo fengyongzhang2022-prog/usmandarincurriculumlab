@@ -74,9 +74,11 @@ button {
 }
 
 .site-header {
-  background: linear-gradient(135deg, var(--blue-900), var(--blue-800));
+  background:
+    radial-gradient(circle at top center, rgba(255, 255, 255, 0.1), transparent 36%),
+    linear-gradient(180deg, #1b4f92 0%, #1f5ca8 72%, #225fa9 100%);
   color: #fff;
-  padding: 26px 34px 0;
+  padding: 22px 34px 0;
   box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
 }
 
@@ -84,7 +86,7 @@ button {
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  padding-bottom: 22px;
+  padding-bottom: 18px;
 }
 
 .hero-banner-centered {
@@ -96,7 +98,7 @@ button {
 }
 
 .hero-copy-centered {
-  max-width: 1160px;
+  max-width: 1040px;
   text-align: center;
 }
 
@@ -109,27 +111,27 @@ button {
 }
 
 .brand-kicker {
-  color: rgba(255, 255, 255, 0.72);
-  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.68);
+  margin-bottom: 8px;
 }
 
 .hero-copy-centered .brand-kicker {
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .hero-banner h1 {
-  font-size: 44px;
-  line-height: 1.12;
-  letter-spacing: 0.01em;
+  font-size: clamp(38px, 4.5vw, 50px);
+  line-height: 1.08;
+  letter-spacing: 0.015em;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
 .hero-summary {
-  margin-top: 12px;
-  max-width: 840px;
-  font-size: 18px;
-  line-height: 1.68;
-  color: rgba(255, 255, 255, 0.9);
+  margin-top: 14px;
+  max-width: 900px;
+  font-size: 17px;
+  line-height: 1.72;
+  color: rgba(255, 255, 255, 0.88);
 }
 
 .hero-copy-centered .hero-summary {
@@ -138,14 +140,16 @@ button {
 }
 
 .hero-project-note {
-  margin-top: 14px;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 14px;
-  line-height: 1.7;
+  margin-top: 18px;
+  padding-top: 14px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.72;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .hero-copy-centered .hero-project-note {
-  max-width: 900px;
+  max-width: 760px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -157,7 +161,7 @@ button {
   overflow-x: auto;
   scrollbar-width: none;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 12px;
+  padding-top: 10px;
 }
 
 .main-nav::-webkit-scrollbar {
@@ -167,10 +171,10 @@ button {
 .nav-tab {
   border: 0;
   border-radius: 14px 14px 0 0;
-  padding: 13px 22px;
-  background: rgba(255, 255, 255, 0.14);
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 17px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
@@ -201,12 +205,12 @@ button {
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 34px 38px;
+  padding: 32px 34px;
   text-align: left;
   background: linear-gradient(180deg, #ffffff, #f8fbfe);
-  border: 1px solid var(--line);
-  border-radius: 28px;
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(201, 214, 228, 0.9);
+  border-radius: 26px;
+  box-shadow: 0 18px 40px rgba(20, 54, 95, 0.05);
 }
 
 .home-copy-main {
@@ -214,14 +218,14 @@ button {
 }
 
 .home-copy-card h2 {
-  font-size: 33px;
-  line-height: 1.26;
+  font-size: clamp(30px, 3vw, 38px);
+  line-height: 1.22;
 }
 
 .home-copy-card p:last-child {
   margin-top: 12px;
   color: var(--ink-700);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.72;
 }
 
@@ -232,10 +236,10 @@ button {
 }
 
 .home-quick-item {
-  padding: 16px 18px;
-  border-radius: 18px;
-  background: #f5f8fc;
-  border: 1px solid var(--line);
+  padding: 15px 16px;
+  border-radius: 16px;
+  background: #f6f9fd;
+  border: 1px solid rgba(214, 224, 236, 0.9);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
@@ -1382,23 +1386,23 @@ textarea {
   }
 
   .site-header {
-    padding: 18px 14px 0;
+    padding: 14px 12px 0;
   }
 
   .hero-banner {
-    gap: 14px;
-    padding-bottom: 16px;
+    gap: 10px;
+    padding-bottom: 12px;
   }
 
   .hero-banner h1,
   .login-hero h1 {
-    font-size: 30px;
-    line-height: 1.18;
+    font-size: 27px;
+    line-height: 1.16;
   }
 
   .brand-kicker,
   .section-kicker {
-    font-size: 11px;
+    font-size: 10px;
     letter-spacing: 0.06em;
   }
 
@@ -1408,19 +1412,28 @@ textarea {
   .module-summary,
   .hero-project-note,
   .drawer-note {
-    font-size: 14px;
-    line-height: 1.72;
+    font-size: 13px;
+    line-height: 1.66;
+  }
+
+  .hero-summary {
+    margin-top: 10px;
+  }
+
+  .hero-project-note {
+    margin-top: 12px;
+    padding-top: 10px;
   }
 
   .main-content,
   .site-footer {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 
   .main-content {
-    padding-top: 14px;
-    padding-bottom: 28px;
+    padding-top: 10px;
+    padding-bottom: 24px;
   }
 
   .home-hero,
@@ -1431,18 +1444,18 @@ textarea {
   }
 
   .main-nav {
-    gap: 8px;
-    padding-bottom: 12px;
-    padding-top: 10px;
+    gap: 6px;
+    padding-bottom: 10px;
+    padding-top: 8px;
     flex-wrap: nowrap;
     overflow-x: auto;
   }
 
   .nav-tab {
     width: auto;
-    padding: 10px 16px;
-    border-radius: 12px 12px 0 0;
-    font-size: 14px;
+    padding: 8px 13px;
+    border-radius: 11px 11px 0 0;
+    font-size: 13px;
     flex: 0 0 auto;
   }
 
@@ -1460,38 +1473,38 @@ textarea {
   }
 
   .home-copy-card {
-    padding-top: 24px;
-    padding-bottom: 24px;
-    border-radius: 22px;
-    gap: 16px;
+    padding: 20px 16px;
+    border-radius: 18px;
+    gap: 12px;
   }
 
   .home-copy-card h2,
   .module-intro-card h2 {
-    font-size: 25px;
-    line-height: 1.32;
+    font-size: 22px;
+    line-height: 1.28;
   }
 
   .home-copy-side {
-    gap: 10px;
+    gap: 8px;
   }
 
   .home-quick-item {
-    padding: 14px 14px 15px;
-    border-radius: 16px;
+    padding: 12px 12px 13px;
+    border-radius: 14px;
   }
 
   .home-quick-item strong {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .home-quick-item span {
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1.5;
   }
 
   .section-headline h2,
   .panel-heading h3 {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .module-grid,
@@ -1535,13 +1548,13 @@ textarea {
 
   .module-card,
   .level-card {
-    padding: 16px 16px 18px;
-    border-radius: 18px;
+    padding: 14px 14px 16px;
+    border-radius: 16px;
   }
 
   .level-card h3,
   .module-card h3 {
-    font-size: 21px;
+    font-size: 18px;
   }
 
   .featured-rail {
@@ -1556,15 +1569,15 @@ textarea {
   }
 
   .featured-card {
-    flex-basis: 78vw;
+    flex-basis: 74vw;
     min-height: 0;
     scroll-snap-align: start;
   }
 
   .featured-card .featured-title,
   .featured-card h3 {
-    font-size: 19px;
-    line-height: 1.35;
+    font-size: 17px;
+    line-height: 1.32;
   }
 
   .result-card h4 {
@@ -1598,7 +1611,7 @@ textarea {
   }
 
   .result-card {
-    flex: 0 0 83vw;
+    flex: 0 0 88vw;
     min-width: 0;
     scroll-snap-align: start;
   }
@@ -1623,8 +1636,8 @@ textarea {
   }
 
   .can-do-card h3 {
-    font-size: 26px;
-    line-height: 1.3;
+    font-size: 22px;
+    line-height: 1.26;
   }
 
   .sample-card .panel-heading,
@@ -1650,13 +1663,13 @@ textarea {
   .assistant-document-overview,
   .assistant-doc-item,
   .token-list {
-    font-size: 14px;
-    line-height: 1.72;
+    font-size: 13px;
+    line-height: 1.66;
   }
 
   .assistant-document {
-    padding: 16px 16px 18px;
-    border-radius: 16px;
+    padding: 14px 14px 16px;
+    border-radius: 14px;
   }
 
   .assistant-workbench {
@@ -1677,11 +1690,11 @@ textarea {
   }
 
   .assistant-document-title {
-    font-size: 24px;
+    font-size: 21px;
   }
 
   .assistant-doc-section h4 {
-    font-size: 20px;
+    font-size: 18px;
   }
 
   .assistant-matrix th,
@@ -1698,8 +1711,8 @@ textarea {
   }
 
   .assistant-tab {
-    padding: 9px 14px;
-    font-size: 14px;
+    padding: 8px 12px;
+    font-size: 13px;
   }
 
   .primary-button {
@@ -1712,7 +1725,7 @@ textarea {
   }
 
   .message-form textarea {
-    min-height: 108px;
+    min-height: 96px;
   }
 
   .level-bar-row {
