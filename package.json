@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build:data": "python ./scripts/build_vocabulary_dataset.py",
-    "build:web": "npm run build:data && node ./scripts/prepare_public.mjs",
+    "build:web": "npm run build:data && node ./scripts/build_reference_indexes.mjs && node ./scripts/prepare_public.mjs",
     "start": "node ./server/server.js"
   },
   "dependencies": {

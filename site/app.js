@@ -539,6 +539,13 @@ async function runAssistantCanDo() {
 }
 
 async function runAssistantRequest({ button, output, url, body, loadingText }) {
+  const cacheKey = buildAssistantCacheKey(url, body);
+  const cached = readAssistantLocalCache(cacheKey);
+  if (cached) {
+    output.innerHTML = renderAssistantResponse(cached, { cached: true });
+    return;
+  }
+
   button.disabled = true;
   const original = button.textContent;
   button.textContent = loadingText;
@@ -549,6 +556,7 @@ async function runAssistantRequest({ button, output, url, body, loadingText }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
+    writeAssistantLocalCache(cacheKey, payload);
     output.innerHTML = renderAssistantResponse(payload);
   } catch (error) {
     output.innerHTML = `<div class="empty-copy">生成失败：${escapeHtml(error.message || String(error))}</div>`;
@@ -558,9 +566,15 @@ async function runAssistantRequest({ button, output, url, body, loadingText }) {
   }
 }
 
-function renderAssistantResponse(payload) {
+function renderAssistantResponse(payload, options = {}) {
   const sourceTag = payload.source
-    ? `<div class="assistant-source-tag">${escapeHtml(payload.source === "fallback" ? "当前显示：本地回退内容" : `当前显示：${payload.source} 生成内容`)}</div>`
+    ? `<div class="assistant-source-tag">${escapeHtml(
+      options.cached
+        ? "当前显示：本地缓存结果"
+        : payload.source === "fallback"
+          ? "当前显示：本地回退内容"
+          : `当前显示：${payload.source} 生成内容`
+    )}</div>`
     : "";
   const matrix = payload.matrix
     ? `
@@ -597,6 +611,28 @@ function renderAssistantResponse(payload) {
   `;
 
   return sections || matrix || payload.overview ? html : `<div class="empty-copy">暂无结果。</div>`;
+}
+
+function buildAssistantCacheKey(url, body) {
+  return `assistant:${url}:${JSON.stringify(body || {})}`;
+}
+
+function readAssistantLocalCache(key) {
+  try {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function writeAssistantLocalCache(key, payload) {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(payload));
+  } catch {
+    // ignore storage failures
+  }
 }
 
 async function runVocabSearch() {

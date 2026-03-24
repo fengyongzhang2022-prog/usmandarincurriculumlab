@@ -1,6 +1,6 @@
 {
   "framework": null,
   "cleanUrls": true,
-  "buildCommand": "node ./scripts/prepare_public.mjs",
+  "buildCommand": "node ./scripts/build_reference_indexes.mjs && node ./scripts/prepare_public.mjs",
   "outputDirectory": "public"
 }

@@ -9,6 +9,8 @@ const ROOT = path.resolve(__dirname, "..");
 const DATA_PATH = fs.existsSync(path.join(ROOT, "site", "data.json"))
   ? path.join(ROOT, "site", "data.json")
   : path.join(ROOT, "public", "data.json");
+const VOCAB_JSON_PATH = path.join(ROOT, "data", "vocab-index.json");
+const GRAMMAR_JSON_PATH = path.join(ROOT, "data", "grammar-index.json");
 const VOCAB_XLSX_PATH = path.join(ROOT, "2026美国中文教学词汇与语法等级量表", "2026_ACTFL_Vocabulary_WithFilters.xlsx");
 const GRAMMAR_XLSX_PATH = path.join(ROOT, "2026美国中文教学词汇与语法等级量表", "ACTFL语法量表总表.xlsx");
 
@@ -107,7 +109,7 @@ export function searchGrammar({ level = "", query = "" } = {}) {
     const haystack = [item.level, item.category, item.grammar, item.example].join(" ").toLowerCase();
     if (needle && haystack.includes(needle)) return true;
     if (!normalizedNeedle) return false;
-    return item.searchKeys.some((key) => key.includes(normalizedNeedle) || normalizedNeedle.includes(key));
+    return item.searchKeys.some((key) => key.includes(normalizedNeedle));
   });
 }
 
@@ -250,6 +252,11 @@ function sanitizeSvgText(value) {
 }
 
 function buildVocabIndex() {
+  if (fs.existsSync(VOCAB_JSON_PATH)) {
+    const payload = JSON.parse(fs.readFileSync(VOCAB_JSON_PATH, "utf-8"));
+    return finalizeVocabIndex(payload.items || []);
+  }
+
   if (!fs.existsSync(VOCAB_XLSX_PATH)) {
     return { items: [], byWord: new Map(), dict: [] };
   }
@@ -266,17 +273,15 @@ function buildVocabIndex() {
     basicEdu: String(row["义务教育等级"] || "").trim(),
   })).filter((item) => item.word);
 
-  const byWord = new Map();
-  for (const item of items) {
-    if (!byWord.has(item.word)) byWord.set(item.word, []);
-    byWord.get(item.word).push(item);
-  }
-
-  const dict = [...byWord.keys()].sort((a, b) => b.length - a.length);
-  return { items, byWord, dict };
+  return finalizeVocabIndex(items);
 }
 
 function buildGrammarIndex() {
+  if (fs.existsSync(GRAMMAR_JSON_PATH)) {
+    const payload = JSON.parse(fs.readFileSync(GRAMMAR_JSON_PATH, "utf-8"));
+    return { items: payload.items || [] };
+  }
+
   if (!fs.existsSync(GRAMMAR_XLSX_PATH)) {
     return { items: [] };
   }
@@ -299,6 +304,17 @@ function buildGrammarIndex() {
     }));
 
   return { items };
+}
+
+function finalizeVocabIndex(items) {
+  const byWord = new Map();
+  for (const item of items) {
+    if (!byWord.has(item.word)) byWord.set(item.word, []);
+    byWord.get(item.word).push(item);
+  }
+
+  const dict = [...byWord.keys()].sort((a, b) => b.length - a.length);
+  return { items, byWord, dict };
 }
 
 function normalizeInputWords(input) {
@@ -335,7 +351,7 @@ function buildGrammarSearchKeys(item) {
     variants.add(normalized.replace(/字/g, ""));
   }
 
-  return [...variants].filter(Boolean);
+  return [...variants].filter((item) => item && item.length >= 2);
 }
 
 function segmentText(text) {
