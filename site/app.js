@@ -559,6 +559,9 @@ async function runAssistantRequest({ button, output, url, body, loadingText }) {
 }
 
 function renderAssistantResponse(payload) {
+  const sourceTag = payload.source
+    ? `<div class="assistant-source-tag">${escapeHtml(payload.source === "fallback" ? "当前显示：本地回退内容" : `当前显示：${payload.source} 生成内容`)}</div>`
+    : "";
   const matrix = payload.matrix
     ? `
       <div class="assistant-matrix-wrap">
@@ -585,6 +588,7 @@ function renderAssistantResponse(payload) {
 
   const html = `
     <article class="assistant-document">
+      ${sourceTag}
       ${payload.documentTitle ? `<h3 class="assistant-document-title">${escapeHtml(payload.documentTitle)}</h3>` : ""}
       ${payload.overview ? `<p class="assistant-document-overview">${escapeHtml(payload.overview)}</p>` : ""}
       ${matrix}

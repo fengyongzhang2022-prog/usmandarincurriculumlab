@@ -981,6 +981,19 @@ textarea {
   background: linear-gradient(180deg, #ffffff, #fbfdff);
 }
 
+.assistant-source-tag {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef4fb;
+  color: var(--ink-700);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .assistant-document-title {
   font-size: 28px;
   line-height: 1.3;

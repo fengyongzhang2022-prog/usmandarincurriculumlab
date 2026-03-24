@@ -230,10 +230,15 @@ export async function generateTopicImage(entry) {
 }
 
 function safeJsonParse(text) {
+  const normalized = String(text || "")
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
   try {
-    return JSON.parse(text);
+    return JSON.parse(normalized);
   } catch {
-    const match = String(text).match(/\{[\s\S]*\}$/);
+    const match = normalized.match(/\{[\s\S]*\}/);
     if (!match) return null;
     try {
       return JSON.parse(match[0]);
@@ -275,6 +280,7 @@ async function requestText(prompt) {
   const chat = await client.chat.completions.create({
     model: providerConfig.model,
     temperature: 0.15,
+    response_format: { type: "json_object" },
     messages: [
       { role: "system", content: system },
       { role: "user", content: prompt },
@@ -300,8 +306,8 @@ function buildFallbackWordMaterials({ word, level, matches, levelHints, grammarH
     kind: "word",
     documentTitle: `${word} 教学讲解卡`,
     overview: levels.length
-      ? `${word} 在 ACTFL 词表中的参考等级是 ${levels.join("、")}。这份讲义按“先讲明白，再让学生会用，最后带着任务输出”的顺序组织。`
-      : `${word} 目前未在 ACTFL 词表中精确收录。建议先按课堂语境判断是否保留，再决定是否作为目标词。`,
+      ? `${word} 在 ACTFL 词表中的参考等级是 ${levels.join("、")}。当前为本地回退讲义，请接通模型后获取更完整版本。`
+      : `${word} 目前未在 ACTFL 词表中精确收录。当前为本地回退讲义，请接通模型后获取更完整版本。`,
     sections: [
       {
         title: "一、基础档案",
@@ -365,7 +371,7 @@ function buildFallbackSynonymMaterials({ terms, level }) {
     source: "fallback",
     kind: "synonyms",
     documentTitle: `${terms.join(" / ")} 辨析讲义`,
-    overview: `这组近义词适合放在${level || "当前"}课堂里做“意义差别 + 搭配偏好 + 情境选择”三步辨析。`,
+    overview: `当前为本地回退辨析讲义。接通模型后会生成更完整的讲义式辨析内容。`,
     matrix: {
       headers: ["词语", "ACTFL等级", "核心意思", "语体/搭配提醒"],
       rows: terms.map((term) => {
@@ -448,7 +454,7 @@ function buildFallbackCanDoMaterials({ canDo, level, mode, focusEntry, levelHint
     source: "fallback",
     kind: "cando",
     documentTitle: "Can-do 课堂生成单",
-    overview: `这份内容先拆这条 can-do 本身要学生“做什么、看什么、说什么”，再给你能直接备课和发学生的材料。`,
+    overview: `当前为本地回退版本。接通模型后会生成更完整的课堂讨论题、语料建议和输出任务。`,
     sections: [
       {
         title: "一、能做拆解",
