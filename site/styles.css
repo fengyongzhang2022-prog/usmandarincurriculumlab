@@ -121,6 +121,7 @@ button {
   font-size: 44px;
   line-height: 1.12;
   letter-spacing: 0.01em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
 .hero-summary {
@@ -141,6 +142,12 @@ button {
   color: rgba(255, 255, 255, 0.76);
   font-size: 14px;
   line-height: 1.7;
+}
+
+.hero-copy-centered .hero-project-note {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .main-nav {
@@ -254,6 +261,10 @@ button {
 
 .section-headline h2 {
   font-size: 28px;
+}
+
+.section-headline .section-kicker {
+  margin-bottom: 8px;
 }
 
 .level-grid {
@@ -617,6 +628,7 @@ textarea {
   padding: 18px;
   position: sticky;
   top: 16px;
+  background: linear-gradient(180deg, #ffffff, #f8fbfe);
 }
 
 .panel-heading {
@@ -1077,6 +1089,10 @@ textarea {
   padding-top: 2px;
 }
 
+.assistant-workbench > .panel-heading {
+  margin-bottom: 4px;
+}
+
 .assistant-tabs {
   display: flex;
   gap: 10px;
@@ -1116,6 +1132,10 @@ textarea {
 .assistant-pane.is-active {
   display: block;
   padding-top: 4px;
+}
+
+.assistant-pane {
+  animation: paneFade 180ms ease;
 }
 
 .drawer-note {
@@ -1193,6 +1213,17 @@ textarea {
   margin-top: 20px;
   padding-top: 18px;
   border-top: 1px solid #e4ebf3;
+}
+
+@keyframes paneFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .assistant-doc-section h4 {
@@ -1483,6 +1514,10 @@ textarea {
     padding-bottom: 14px;
   }
 
+  .meta-number {
+    font-size: 22px;
+  }
+
   .filter-grid label,
   .filter-grid-compact label {
     gap: 6px;
@@ -1563,6 +1598,11 @@ textarea {
     scroll-snap-align: start;
   }
 
+  .result-card .result-meta,
+  .result-card .result-english {
+    line-height: 1.45;
+  }
+
   .detail-english,
   .detail-meta,
   .active-path,
@@ -1606,6 +1646,19 @@ textarea {
 
   .assistant-workbench {
     margin-top: 14px;
+  }
+
+  .assistant-workbench .panel-heading {
+    margin-bottom: 2px;
+  }
+
+  .assistant-pane .primary-button {
+    margin-top: 12px;
+    margin-bottom: 6px;
+  }
+
+  .assistant-document {
+    box-shadow: 0 8px 18px rgba(24, 79, 152, 0.05);
   }
 
   .assistant-document-title {

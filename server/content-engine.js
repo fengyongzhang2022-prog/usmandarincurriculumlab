@@ -100,11 +100,14 @@ export function getGrammarIndexSummary() {
 
 export function searchGrammar({ level = "", query = "" } = {}) {
   const needle = String(query || "").trim().toLowerCase();
+  const normalizedNeedle = normalizeGrammarSearch(query);
   return grammarIndex.items.filter((item) => {
     if (level && item.level !== level) return false;
-    if (!needle) return true;
+    if (!needle && !normalizedNeedle) return true;
     const haystack = [item.level, item.category, item.grammar, item.example].join(" ").toLowerCase();
-    return haystack.includes(needle);
+    if (needle && haystack.includes(needle)) return true;
+    if (!normalizedNeedle) return false;
+    return item.searchKeys.some((key) => key.includes(normalizedNeedle) || normalizedNeedle.includes(key));
   });
 }
 
@@ -289,7 +292,11 @@ function buildGrammarIndex() {
       grammar: normalizeSpaces(row["语法项"]),
       example: String(row["例句"] || "").trim(),
     }))
-    .filter((item) => item.level || item.category || item.grammar);
+    .filter((item) => item.level || item.category || item.grammar)
+    .map((item) => ({
+      ...item,
+      searchKeys: buildGrammarSearchKeys(item),
+    }));
 
   return { items };
 }
@@ -303,6 +310,32 @@ function normalizeInputWords(input) {
 
 function normalizeSpaces(value) {
   return String(value || "").replace(/\s+/g, " ").trim();
+}
+
+function normalizeGrammarSearch(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[“”"'‘’（）()［］\[\]\-—·、，,：:；;！？?!\s]/g, "")
+    .replace(/的/g, "")
+    .trim();
+}
+
+function buildGrammarSearchKeys(item) {
+  const seeds = [item.grammar, item.category, `${item.category}${item.grammar}`].filter(Boolean);
+  const variants = new Set();
+
+  for (const seed of seeds) {
+    const normalized = normalizeGrammarSearch(seed);
+    if (!normalized) continue;
+    variants.add(normalized);
+    variants.add(normalized.replace(/字句/g, "句"));
+    variants.add(normalized.replace(/句式/g, "句"));
+    variants.add(normalized.replace(/结构/g, ""));
+    variants.add(normalized.replace(/句/g, "字句"));
+    variants.add(normalized.replace(/字/g, ""));
+  }
+
+  return [...variants].filter(Boolean);
 }
 
 function segmentText(text) {

@@ -8,6 +8,8 @@ const client = providerConfig.apiKey
       baseURL: providerConfig.baseURL,
     })
   : null;
+const assistantCache = new Map();
+const ASSISTANT_CACHE_LIMIT = 120;
 
 export function isOpenAIConfigured() {
   return Boolean(client);
@@ -76,12 +78,17 @@ export async function generateLessonPack(entry) {
 }
 
 export async function generateWordMaterials({ word, level = "" }) {
+  const cacheKey = `word:${String(word || "").trim()}|${String(level || "").trim()}`;
+  const cached = readAssistantCache(cacheKey);
+  if (cached) return cached;
   const matches = searchVocabulary(word)[0]?.matches || [];
   const levelHints = level ? getLevelResources(level).slice(0, 3) : [];
   const grammarHints = searchGrammar({ level, query: word }).slice(0, 5);
 
   if (!client) {
-    return buildFallbackWordMaterials({ word, level, matches, levelHints, grammarHints });
+    const fallback = buildFallbackWordMaterials({ word, level, matches, levelHints, grammarHints });
+    writeAssistantCache(cacheKey, fallback);
+    return fallback;
   }
 
   const prompt = [
@@ -111,7 +118,9 @@ export async function generateWordMaterials({ word, level = "" }) {
   ].join("\n");
 
   const parsed = await requestJson(prompt);
-  return parsed || buildFallbackWordMaterials({ word, level, matches, levelHints, grammarHints });
+  const result = parsed || buildFallbackWordMaterials({ word, level, matches, levelHints, grammarHints });
+  writeAssistantCache(cacheKey, result);
+  return result;
 }
 
 export async function generateSynonymMaterials({ terms, level = "" }) {
@@ -120,9 +129,14 @@ export async function generateSynonymMaterials({ terms, level = "" }) {
     .map((item) => item.trim())
     .filter(Boolean)
     .slice(0, 6);
+  const cacheKey = `synonyms:${parsedTerms.join("|")}|${String(level || "").trim()}`;
+  const cached = readAssistantCache(cacheKey);
+  if (cached) return cached;
 
   if (!client) {
-    return buildFallbackSynonymMaterials({ terms: parsedTerms, level });
+    const fallback = buildFallbackSynonymMaterials({ terms: parsedTerms, level });
+    writeAssistantCache(cacheKey, fallback);
+    return fallback;
   }
 
   const vocabHints = parsedTerms.map((term) => ({
@@ -150,16 +164,23 @@ export async function generateSynonymMaterials({ terms, level = "" }) {
   ].join("\n");
 
   const parsed = await requestJson(prompt);
-  return parsed || buildFallbackSynonymMaterials({ terms: parsedTerms, level });
+  const result = parsed || buildFallbackSynonymMaterials({ terms: parsedTerms, level });
+  writeAssistantCache(cacheKey, result);
+  return result;
 }
 
 export async function generateCanDoMaterials({ canDo, level = "", mode = "" }) {
+  const cacheKey = `cando:${String(canDo || "").trim()}|${String(level || "").trim()}|${String(mode || "").trim()}`;
+  const cached = readAssistantCache(cacheKey);
+  if (cached) return cached;
   const focusEntry = matchEntryFromCanDo(canDo, level, mode);
   const levelHints = getLevelResources(level || focusEntry?.level || "").slice(0, 4);
   const grammarHints = searchGrammar({ level: level || focusEntry?.level || "" }).slice(0, 6);
 
   if (!client) {
-    return buildFallbackCanDoMaterials({ canDo, level, mode, focusEntry, levelHints, grammarHints });
+    const fallback = buildFallbackCanDoMaterials({ canDo, level, mode, focusEntry, levelHints, grammarHints });
+    writeAssistantCache(cacheKey, fallback);
+    return fallback;
   }
 
   const prompt = [
@@ -186,7 +207,9 @@ export async function generateCanDoMaterials({ canDo, level = "", mode = "" }) {
   ].join("\n");
 
   const parsed = await requestJson(prompt);
-  return parsed || buildFallbackCanDoMaterials({ canDo, level, mode, focusEntry, levelHints, grammarHints });
+  const result = parsed || buildFallbackCanDoMaterials({ canDo, level, mode, focusEntry, levelHints, grammarHints });
+  writeAssistantCache(cacheKey, result);
+  return result;
 }
 
 export async function generateTopicImage(entry) {
@@ -280,6 +303,7 @@ async function requestText(prompt) {
   const chat = await client.chat.completions.create({
     model: providerConfig.model,
     temperature: 0.15,
+    max_tokens: 2200,
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: system },
@@ -288,6 +312,23 @@ async function requestText(prompt) {
   });
 
   return chat.choices?.[0]?.message?.content || "";
+}
+
+function readAssistantCache(key) {
+  if (!assistantCache.has(key)) return null;
+  const value = assistantCache.get(key);
+  assistantCache.delete(key);
+  assistantCache.set(key, value);
+  return value;
+}
+
+function writeAssistantCache(key, value) {
+  assistantCache.set(key, value);
+  while (assistantCache.size > ASSISTANT_CACHE_LIMIT) {
+    const oldestKey = assistantCache.keys().next().value;
+    if (!oldestKey) break;
+    assistantCache.delete(oldestKey);
+  }
 }
 
 function buildFallbackWordMaterials({ word, level, matches, levelHints, grammarHints }) {
