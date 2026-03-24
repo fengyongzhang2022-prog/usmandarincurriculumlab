@@ -316,7 +316,7 @@ function renderHomepage() {
   els.homeLevelGrid.innerHTML = levels.map((level) => `
     <article class="level-card" data-level-jump="${escapeAttr(level)}">
       <h3>${escapeHtml(level)}</h3>
-      <p>查看这个等级的 can-do、语篇与配套词语。</p>
+      <p>查看这个等级的能做描述、语篇与配套词语。</p>
     </article>
   `).join("");
 
@@ -534,7 +534,7 @@ async function runAssistantCanDo() {
     output: els.assistantCanDoOutput,
     url: "/api/assistant/cando",
     body: { canDo: selected.canDo, level: level || selected.level, mode: mode || selected.mode, id: selected.id },
-    loadingText: "生成课堂任务中",
+      loadingText: "生成能做材料中",
   });
 }
 

@@ -29,7 +29,7 @@ body {
 body {
   background: linear-gradient(180deg, #f5f8fb 0%, #eef3f8 100%);
   color: var(--ink-900);
-  font-family: "Source Sans 3", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: "Noto Sans SC", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", "PingFang SC", "Microsoft YaHei", sans-serif;
   line-height: 1.55;
 }
 
@@ -151,7 +151,7 @@ button {
   padding: 14px 24px;
   background: rgba(255, 255, 255, 0.14);
   color: rgba(255, 255, 255, 0.9);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -424,13 +424,13 @@ button {
 
 .module-card h3 {
   margin-top: 14px;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .module-card p {
   margin-top: 10px;
   color: var(--ink-700);
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .view {
@@ -622,8 +622,8 @@ textarea {
 
 .result-card h4 {
   margin-top: 10px;
-  font-size: 24px;
-  line-height: 1.45;
+  font-size: 22px;
+  line-height: 1.38;
 }
 
 .result-card .result-english {
@@ -650,14 +650,14 @@ textarea {
 }
 
 .can-do-card h3 {
-  font-size: 42px;
-  line-height: 1.35;
+  font-size: 38px;
+  line-height: 1.28;
 }
 
 .detail-english {
   margin-top: 12px;
-  font-size: 18px;
-  line-height: 1.65;
+  font-size: 17px;
+  line-height: 1.58;
 }
 
 .detail-meta {
@@ -709,8 +709,8 @@ textarea {
   padding: 18px 20px;
   border-radius: var(--radius-lg);
   background: var(--gold-050);
-  font-size: 17px;
-  line-height: 1.62;
+  font-size: 16px;
+  line-height: 1.72;
 }
 
 .sample-caption {
@@ -976,8 +976,8 @@ textarea {
 .assistant-card p {
   margin-top: 10px;
   color: var(--ink-700);
-  font-size: 16px;
-  line-height: 1.7;
+  font-size: 15px;
+  line-height: 1.62;
 }
 
 .assistant-workbench {
@@ -1127,7 +1127,7 @@ textarea {
 
   .nav-tab {
     padding: 12px 18px;
-    font-size: 16px;
+    font-size: 15px;
     white-space: nowrap;
   }
 
@@ -1179,7 +1179,7 @@ textarea {
   }
 
   .can-do-card h3 {
-    font-size: 30px;
+    font-size: 28px;
   }
 
   .result-card h4 {

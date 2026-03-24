@@ -6,7 +6,7 @@
   <title>美国中文教学资源平台</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -74,7 +74,7 @@
             <article class="module-card" data-jump-view="outlineView">
               <div class="module-icon">检</div>
               <h3>教学大纲检索</h3>
-              <p>按等级、模态、主题、话题与示例检索材料，查看 can-do、语篇与配套词语。</p>
+              <p>按等级、模态、主题、话题与示例检索材料，查看能做描述、语篇与配套词语。</p>
             </article>
             <article class="module-card" data-jump-view="vocabView">
               <div class="module-icon">词</div>
@@ -100,7 +100,7 @@
           <div>
             <p class="section-kicker">模块简介</p>
             <h2>按等级、模态、主题与话题检索教学材料</h2>
-            <p>按等级、模态、主题、子主题与话题浏览材料。页面优先呈现与 can-do 紧密对应的原始语篇、配套词语与同话题跨等级材料。</p>
+            <p>按等级、模态、主题、子主题与话题浏览材料。页面优先呈现与能做描述紧密对应的原始语篇、配套词语与同话题跨等级材料。</p>
           </div>
         </article>
 
@@ -300,7 +300,7 @@
           <div>
             <p class="section-kicker">模块简介</p>
             <h2>智能备课</h2>
-            <p>从教师真实备课入口出发：输入一个词、两三个近义词，或直接粘贴 can-do，生成可直接继续修改的教学支架、辨析材料与课堂任务。</p>
+            <p>从教师真实备课入口出发：输入一个词、两三个近义词，或选择一条能做描述，生成可继续修改的讲义式教学材料。</p>
           </div>
         </article>
 
@@ -314,8 +314,8 @@
             <p>输入两个或多个近义词，生成语义差别、典型搭配、常见误用与对比练习。</p>
           </article>
           <article class="content-card assistant-card">
-            <h3>Can-do 转课堂任务</h3>
-            <p>粘贴能做描述，生成任务链、教师脚本、学生产出与简短测评建议。</p>
+            <h3>能做材料生成</h3>
+            <p>围绕一条能做描述生成讨论题、语料入口、课堂任务与输出题。</p>
           </article>
         </div>
 
@@ -331,7 +331,7 @@
           <div class="assistant-tabs">
             <button id="assistantTabWord" class="assistant-tab is-active" type="button" data-assistant-tab="word">词汇讲解</button>
             <button id="assistantTabSynonyms" class="assistant-tab" type="button" data-assistant-tab="synonyms">近义词辨析</button>
-            <button id="assistantTabCanDo" class="assistant-tab" type="button" data-assistant-tab="cando">Can-do 生成</button>
+            <button id="assistantTabCanDo" class="assistant-tab" type="button" data-assistant-tab="cando">能做材料生成</button>
           </div>
 
           <div id="assistantPaneWord" class="assistant-pane is-active">
@@ -379,8 +379,8 @@
                 <select id="assistantCanDoSelect"></select>
               </label>
             </div>
-            <button id="assistantCanDoBtn" class="primary-button" type="button">生成课堂任务</button>
-            <div id="assistantCanDoOutput" class="analysis-panel empty-copy">输入 can-do 后生成。</div>
+              <button id="assistantCanDoBtn" class="primary-button" type="button">生成能做材料</button>
+              <div id="assistantCanDoOutput" class="analysis-panel empty-copy">选择一条能做描述后生成。</div>
           </div>
         </article>
       </section>
