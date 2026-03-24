@@ -5,6 +5,7 @@ import { readJsonBody, sendMethodNotAllowed } from "./_lib/http.js";
 const ROOT = path.resolve(process.cwd());
 const MESSAGE_DIR = path.join(ROOT, "data");
 const MESSAGE_LOG = path.join(MESSAGE_DIR, "messages.jsonl");
+const SHEETS_WEBHOOK = process.env.GOOGLE_SHEETS_WEBHOOK_URL || "";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -33,6 +34,20 @@ export default async function handler(req, res) {
     }) + "\n",
     "utf8"
   );
+
+  if (SHEETS_WEBHOOK) {
+    await fetch(SHEETS_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        createdAt: new Date().toISOString(),
+        name,
+        email,
+        message,
+        source: "usmandarincurriculumlab",
+      }),
+    }).catch(() => null);
+  }
 
   res.status(200).json({ ok: true });
 }

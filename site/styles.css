@@ -33,6 +33,16 @@ body {
   line-height: 1.55;
 }
 
+.login-body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(61, 112, 181, 0.14), transparent 34%),
+    linear-gradient(180deg, #f4f7fb 0%, #ebf1f7 100%);
+}
+
 h1,
 h2,
 h3,
@@ -62,7 +72,7 @@ button {
 .site-header {
   background: linear-gradient(135deg, var(--blue-900), var(--blue-800));
   color: #fff;
-  padding: 26px 34px 0;
+  padding: 28px 34px 0;
 }
 
 .hero-banner {
@@ -99,7 +109,7 @@ button {
 }
 
 .hero-banner h1 {
-  font-size: 42px;
+  font-size: 46px;
   line-height: 1.15;
 }
 
@@ -127,6 +137,12 @@ button {
   display: flex;
   gap: 10px;
   padding-bottom: 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.main-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-tab {
@@ -159,9 +175,9 @@ button {
 }
 
 .home-copy-card {
-  max-width: 860px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 28px 32px;
+  padding: 34px 38px;
   text-align: center;
   background: linear-gradient(180deg, #ffffff, #f8fbfe);
   border: 1px solid var(--line);
@@ -318,6 +334,69 @@ button {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.login-shell {
+  width: min(100%, 1080px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 420px);
+  gap: 28px;
+  align-items: stretch;
+}
+
+.login-hero,
+.login-panel {
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow);
+}
+
+.login-hero {
+  padding: 42px 44px;
+  background:
+    linear-gradient(140deg, rgba(24, 79, 152, 0.98), rgba(31, 99, 183, 0.92)),
+    #1f63b7;
+  color: #fff;
+}
+
+.login-hero h1 {
+  font-size: 44px;
+  line-height: 1.12;
+}
+
+.login-summary {
+  margin-top: 16px;
+  max-width: 540px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+.login-panel {
+  padding: 34px 32px;
+}
+
+.login-panel h2 {
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.login-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.login-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.login-form span {
+  color: var(--ink-700);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .featured-card .featured-meta {
@@ -992,6 +1071,135 @@ textarea {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.02em;
+}
+
+@media (max-width: 1180px) {
+  .module-grid,
+  .assistant-grid,
+  .tool-layout,
+  .detail-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .outline-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .results-panel {
+    position: static;
+  }
+
+  .filter-grid,
+  .filter-grid-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .featured-card {
+    flex-basis: calc((100% - 18px) / 2);
+  }
+
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-header {
+    padding: 20px 16px 0;
+  }
+
+  .main-content {
+    padding: 16px 14px 36px;
+  }
+
+  .hero-banner h1,
+  .login-hero h1 {
+    font-size: 34px;
+  }
+
+  .hero-summary,
+  .home-copy-card p:last-child,
+  .module-intro-card p:last-child,
+  .module-summary {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .nav-tab {
+    padding: 12px 18px;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
+  .home-copy-card,
+  .module-intro-card,
+  .content-card,
+  .results-panel,
+  .filter-panel,
+  .can-do-card,
+  .login-panel,
+  .login-hero {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .module-grid,
+  .assistant-grid,
+  .tool-layout,
+  .detail-grid,
+  .level-grid,
+  .filter-grid,
+  .filter-grid-compact {
+    grid-template-columns: 1fr;
+  }
+
+  .module-intro-card {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .featured-rail {
+    grid-template-columns: 38px minmax(0, 1fr) 38px;
+    gap: 8px;
+  }
+
+  .rail-button {
+    width: 38px;
+    height: 38px;
+    font-size: 22px;
+  }
+
+  .featured-card {
+    flex-basis: 84%;
+    min-height: 0;
+  }
+
+  .can-do-card {
+    text-align: left;
+  }
+
+  .can-do-card h3 {
+    font-size: 30px;
+  }
+
+  .result-card h4 {
+    font-size: 20px;
+  }
+
+  .panel-heading h3,
+  .section-headline h2,
+  .module-intro-card h2 {
+    font-size: 24px;
+  }
+
+  .corpus-block,
+  .analysis-panel {
+    font-size: 15px;
+  }
+
+  .level-bar-row {
+    grid-template-columns: 110px minmax(0, 1fr) 44px;
+  }
 }
 
 .assistant-document-title {

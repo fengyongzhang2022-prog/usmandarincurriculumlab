@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 | 美国中文教学资源平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+SC:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="login-body">
+  <main class="login-shell">
+    <section class="login-hero">
+      <p class="brand-kicker">US Mandarin Lab</p>
+      <h1>美国中文教学资源平台</h1>
+      <p class="login-summary">本网站为教育部语言合作交流中心项目“美国本土版中文教育词汇与语法量表研制”阶段成果。请输入账号与密码后进入平台。</p>
+    </section>
+
+    <section class="login-panel">
+      <p class="section-kicker">身份验证</p>
+      <h2>登录平台</h2>
+      <form id="loginForm" class="login-form">
+        <label>
+          <span>账号</span>
+          <input id="loginUsername" type="text" autocomplete="username" placeholder="请输入账号">
+        </label>
+        <label>
+          <span>密码</span>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="请输入密码">
+        </label>
+        <button id="loginButton" class="primary-button" type="submit">进入平台</button>
+        <div id="loginStatus" class="message-status"></div>
+      </form>
+    </section>
+  </main>
+  <script src="/login.js"></script>
+</body>
+</html>

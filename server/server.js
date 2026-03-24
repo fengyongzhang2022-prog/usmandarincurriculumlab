@@ -34,6 +34,8 @@ const ROOT = path.resolve(__dirname, "..");
 const SITE_DIR = path.join(ROOT, "site");
 const MESSAGE_DIR = path.join(ROOT, "data");
 const MESSAGE_LOG = path.join(MESSAGE_DIR, "messages.jsonl");
+const SHEETS_WEBHOOK = process.env.GOOGLE_SHEETS_WEBHOOK_URL || "";
+const COOKIE_NAME = "actfl_auth";
 
 app.use(express.json({ limit: "4mb" }));
 
@@ -45,20 +47,47 @@ app.use((req, res, next) => {
     return;
   }
 
-  const username = process.env.SITE_USERNAME || "teacher";
-  const authHeader = req.headers.authorization || "";
-  const credentials = parseBasicHeader(authHeader);
   if (
-    credentials &&
-    credentials.username === username &&
-    matchesPassword(credentials.password, password, passwordHash)
+    req.path === "/login" ||
+    req.path === "/login.html" ||
+    req.path === "/login.js" ||
+    req.path === "/styles.css" ||
+    req.path === "/api/auth/login"
   ) {
     next();
     return;
   }
 
-  res.setHeader("WWW-Authenticate", 'Basic realm="ACTFL Teacher Dashboard"');
-  res.status(401).send("Authentication required");
+  const username = process.env.SITE_USERNAME || "teacher";
+  const expected = expectedCookieValue(username, password, passwordHash);
+  const cookieValue = parseCookie(req.headers.cookie || "", COOKIE_NAME);
+  if (cookieValue && cookieValue === expected) {
+    next();
+    return;
+  }
+
+  const nextPath = req.originalUrl && req.originalUrl !== "/" ? `?next=${encodeURIComponent(req.originalUrl)}` : "";
+  res.redirect(`/login.html${nextPath}`);
+});
+
+app.post("/api/auth/login", (req, res) => {
+  const password = process.env.SITE_PASSWORD || "";
+  const passwordHash = (process.env.SITE_PASSWORD_HASH || "").trim().toLowerCase();
+  const username = process.env.SITE_USERNAME || "teacher";
+  const inputUsername = String(req.body?.username || "").trim();
+  const inputPassword = String(req.body?.password || "");
+
+  if ((!password && !passwordHash) || inputUsername !== username || !matchesPassword(inputPassword, password, passwordHash)) {
+    res.status(401).json({ error: "账号或密码错误。" });
+    return;
+  }
+
+  const secure = process.env.NODE_ENV === "production";
+  res.setHeader(
+    "Set-Cookie",
+    `${COOKIE_NAME}=${expectedCookieValue(username, password, passwordHash)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 14}${secure ? "; Secure" : ""}`
+  );
+  res.json({ ok: true });
 });
 
 app.use("/assets", express.static(SITE_DIR));
@@ -134,6 +163,20 @@ app.post("/api/messages", (req, res) => {
     }, null, 0) + "\n",
     "utf8"
   );
+
+  if (SHEETS_WEBHOOK) {
+    fetch(SHEETS_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        createdAt: new Date().toISOString(),
+        name,
+        email,
+        message,
+        source: "usmandarincurriculumlab",
+      }),
+    }).catch(() => null);
+  }
 
   res.json({ ok: true });
 });
@@ -221,15 +264,13 @@ app.listen(port, () => {
   console.log(`ACTFL teacher dashboard running at http://localhost:${port}`);
 });
 
-function parseBasicHeader(header) {
-  if (!header.startsWith("Basic ")) return null;
-  const decoded = Buffer.from(header.slice(6), "base64").toString("utf8");
-  const pivot = decoded.indexOf(":");
-  if (pivot < 0) return null;
-  return {
-    username: decoded.slice(0, pivot),
-    password: decoded.slice(pivot + 1),
-  };
+function parseCookie(header, name) {
+  const cookies = String(header || "").split(/;\s*/);
+  for (const cookie of cookies) {
+    const [key, ...rest] = cookie.split("=");
+    if (key === name) return rest.join("=");
+  }
+  return "";
 }
 
 function matchesPassword(password, plain, hash) {
@@ -238,4 +279,9 @@ function matchesPassword(password, plain, hash) {
     return digest === hash;
   }
   return password === plain;
+}
+
+function expectedCookieValue(username, plain, hash) {
+  const secret = hash || crypto.createHash("sha256").update(plain).digest("hex");
+  return crypto.createHash("sha256").update(`${username}:${secret}`).digest("hex");
 }

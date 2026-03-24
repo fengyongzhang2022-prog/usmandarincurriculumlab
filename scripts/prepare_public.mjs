@@ -11,7 +11,7 @@ const targetDir = path.join(root, "public");
 fs.rmSync(targetDir, { recursive: true, force: true });
 fs.mkdirSync(targetDir, { recursive: true });
 
-for (const file of ["index.html", "app.js", "styles.css", "data.js", "data.json"]) {
+for (const file of ["index.html", "login.html", "app.js", "login.js", "styles.css", "data.js", "data.json"]) {
   fs.copyFileSync(path.join(sourceDir, file), path.join(targetDir, file));
 }
 
