@@ -1,6 +1,6 @@
 {
   "framework": null,
   "cleanUrls": true,
-  "buildCommand": "echo skip-vercel-build",
+  "buildCommand": "node ./scripts/prepare_public.mjs",
   "outputDirectory": "public"
 }
