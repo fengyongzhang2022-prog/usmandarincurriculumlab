@@ -11,7 +11,6 @@
   "dependencies": {
     "express": "^5.1.0",
     "openai": "^6.6.0",
-    "playwright": "^1.58.2",
     "xlsx": "^0.18.5"
   }
 }
