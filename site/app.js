@@ -765,11 +765,7 @@ async function submitMessage() {
 }
 
 function updateStudioNote() {
-  const configured = state.health?.openaiConfigured;
-  const provider = state.health?.provider?.provider || "fallback";
-  els.studioNote.textContent = configured
-    ? `当前已连接 ${provider} 接口。系统会先读取词汇、语法与量表信息，再生成结构化教学材料。`
-    : "当前未配置模型密钥，系统会先用本地模板生成可修改版本；后续接入 DeepSeek 后，可在同一结构下提升质量。";
+  els.studioNote.textContent = "生成内容时响应速度可能有限。等待期间，可先继续浏览其他页面或查看原始语料与词汇信息。";
 }
 
 function splitCanDo(value) {
